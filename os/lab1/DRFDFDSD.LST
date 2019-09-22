@@ -1,0 +1,1250 @@
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 1
+
+021D:0746  E8 0070		;*		call	sub_1			; (07B9)
+021D:0746  E8 70 00				db	0E8h, 70h, 00h
+021D:0749  06					push	es
+021D:074A  1E					push	ds
+021D:074B  50					push	ax
+021D:074C  52					push	dx
+021D:074D  B8 0040				mov	ax,40h
+021D:0750  8E D8				mov	ds,ax
+021D:0752  33 C0				xor	ax,ax			; Zero register
+021D:0754  8E C0				mov	es,ax
+021D:0756  FF 06 006C				inc	word ptr ds:[6Ch]	; (0040:006C=3B3Bh)
+021D:075A  75 04				jnz	loc_1			; Jump if not zero
+021D:075C  FF 06 006E				inc	word ptr ds:[6Eh]	; (0040:006E=0Fh)
+021D:0760			loc_1:
+021D:0760  83 3E 006E 18			cmp	word ptr ds:[6Eh],18h	; (0040:006E=0Fh)
+021D:0765  75 15				jne	loc_2			; Jump if not equal
+021D:0767  81 3E 006C 00B0			cmp	word ptr ds:[6Ch],0B0h	; (0040:006C=3B3Bh)
+021D:076D  75 0D				jne	loc_2			; Jump if not equal
+021D:076F  A3 006E				mov	word ptr ds:[6Eh],ax	; (0040:006E=0Fh)
+021D:0772  A3 006C				mov	word ptr ds:[6Ch],ax	; (0040:006C=3B3Bh)
+021D:0775  C6 06 0070 01			mov	byte ptr ds:[70h],1	; (0040:0070=0)
+021D:077A  0C 08				or	al,8
+021D:077C			loc_2:
+021D:077C  50					push	ax
+021D:077D  FE 0E 0040				dec	byte ptr ds:[40h]	; (0040:0040=36h)
+021D:0781  75 0B				jnz	loc_3			; Jump if not zero
+021D:0783  80 26 003F F0			and	byte ptr ds:[3Fh],0F0h	; (0040:003F=0)
+021D:0788  B0 0C				mov	al,0Ch
+021D:078A  BA 03F2				mov	dx,3F2h
+021D:078D  EE					out	dx,al			; port 3F2h, dsk0 contrl output
+021D:078E			loc_3:
+021D:078E  58					pop	ax
+021D:078F  F7 06 0314 0004			test	word ptr ds:[314h],4	; (0040:0314=3200h)
+021D:0795  75 0C				jnz	loc_4			; Jump if not zero
+021D:0797  9F					lahf				; Load ah from flags
+021D:0798  86 E0				xchg	ah,al
+021D:079A  50					push	ax
+021D:079B  26: FF 1E 0070			call	dword ptr es:[70h]	; (0000:0070=6ADh)
+021D:07A0  EB 03				jmp	short loc_5		; (07A5)
+021D:07A2  90					nop
+021D:07A3			loc_4:
+021D:07A3  CD 1C				int	1Ch			; Timer break (call each 18.2ms)
+021D:07A5			loc_5:
+021D:07A5  E8 0011				call	sub_1			; (07B9)
+021D:07A8  B0 20				mov	al,20h			; ' '
+021D:07AA  E6 20				out	20h,al			; port 20h, 8259-1 int command
+										;  al = 20h, end of interrupt
+021D:07AC  5A					pop	dx
+021D:07AD  58					pop	ax
+021D:07AE  1F					pop	ds
+021D:07AF  07					pop	es
+021D:07B0  E9 FE99				jmp	$-164h
+021D:07B3  C4					db	0C4h
+							                        ;* No entry point to code
+021D:07B4  C4 0E 93E9				les	cx,dword ptr ds:[93E9h]	; (0000:93E9=0) Load 32 bit ptr
+021D:07B8  FE					db	0FEh
+
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 2
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_1		proc	near
+021D:07B9  1E					push	ds
+021D:07BA  50					push	ax
+021D:07BB  B8 0040				mov	ax,40h
+021D:07BE  8E D8				mov	ds,ax
+021D:07C0  9F					lahf				; Load ah from flags
+021D:07C1  F7 06 0314 2400			test	word ptr ds:[314h],2400h	; (0040:0314=3200h)
+021D:07C7  75 0C				jnz	loc_7			; Jump if not zero
+021D:07C9  F0> 81 26 0314 FDFF	                           lock	and	word ptr ds:[314h],0FDFFh	; (0040:0314=3200h)
+021D:07D0			loc_6:
+021D:07D0  9E					sahf				; Store ah into flags
+021D:07D1  58					pop	ax
+021D:07D2  1F					pop	ds
+021D:07D3  EB 03				jmp	short loc_8		; (07D8)
+021D:07D5			loc_7:
+021D:07D5  FA					cli				; Disable interrupts
+021D:07D6  EB F8				jmp	short loc_6		; (07D0)
+021D:07D8			loc_8:
+021D:07D8  C3					retn
+				sub_1		endp
+
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_2		proc	near
+021D:07D9  1E					push	ds
+021D:07DA  50					push	ax
+021D:07DB  B8 0040				mov	ax,40h
+021D:07DE  8E D8				mov	ds,ax
+021D:07E0  9F					lahf				; Load ah from flags
+021D:07E1  F7 06 0314 0003			test	word ptr ds:[314h],3	; (0040:0314=3200h)
+021D:07E7  75 14				jnz	loc_10			; Jump if not zero
+021D:07E9  F7 06 0314 2400			test	word ptr ds:[314h],2400h	; (0040:0314=3200h)
+021D:07EF  75 0C				jnz	loc_10			; Jump if not zero
+021D:07F1  F0> 81 0E 0314 0200	                           lock	or	word ptr ds:[314h],200h	; (0040:0314=3200h)
+021D:07F8			loc_9:
+021D:07F8  9E					sahf				; Store ah into flags
+021D:07F9  58					pop	ax
+021D:07FA  1F					pop	ds
+021D:07FB  EB 03				jmp	short loc_11		; (0800)
+021D:07FD			loc_10:
+021D:07FD  FB					sti				; Enable interrupts
+021D:07FE  EB F8				jmp	short loc_9		; (07F8)
+021D:0800			loc_11:
+021D:0800  C3					retn
+				sub_2		endp
+
+021D:0801  00					db	0
+021D:0802  0000			data_42		dw	0
+021D:0804  0000			data_43		dw	0
+
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 3
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_3		proc	near
+021D:0806  2E: FF 06 0804			inc	cs:data_43		; (021D:0804=0)
+021D:080B  3D 13FF				cmp	ax,13FFh
+021D:080E  75 5B				jne	loc_14			; Jump if not equal
+021D:0810  83 F9 01				cmp	cx,1
+021D:0813  74 40				je	loc_12			; Jump if equal
+021D:0815  56					push	si
+021D:0816  BE 00A4				mov	si,0A4h
+021D:0819  2E: 2B 36 0802			sub	si,cs:data_42		; (021D:0802=0)
+021D:081E  3B CE				cmp	cx,si
+021D:0820  73 3E				jae	loc_13			; Jump if above or =
+021D:0822  57					push	di
+021D:0823  51					push	cx
+021D:0824  52					push	dx
+021D:0825  1E					push	ds
+021D:0826  06					push	es
+021D:0827  8C C2				mov	dx,es
+021D:0829  8E DA				mov	ds,dx
+021D:082B  BA B000				mov	dx,0B000h
+021D:082E  8E C2				mov	es,dx
+021D:0830  8B D1				mov	dx,cx
+021D:0832  8B F7				mov	si,di
+021D:0834  2E: 8B 3E 0802			mov	di,cs:data_42		; (021D:0802=0)
+021D:0839  FC					cld				; Clear direction
+021D:083A  D1 E9				shr	cx,1			; Shift w/zeros fill
+021D:083C  F3/ A5				rep	movsw			; Rep when cx >0 Mov [si] to es:[di]
+021D:083E  80 D1 00				adc	cl,0
+021D:0841  F3/ A4				rep	movsb			; Rep when cx >0 Mov [si] to es:[di]
+021D:0843  2E: 01 16 0802			add	cs:data_42,dx		; (021D:0802=0)
+021D:0848  07					pop	es
+021D:0849  1F					pop	ds
+021D:084A  5A					pop	dx
+021D:084B  59					pop	cx
+021D:084C  5F					pop	di
+021D:084D  5E					pop	si
+021D:084E  F9					stc				; Set carry flag
+021D:084F  2E: FF 0E 0804			dec	cs:data_43		; (021D:0804=0)
+021D:0854  C3					retn
+021D:0855			loc_12:
+021D:0855  50					push	ax
+021D:0856  B4 0E				mov	ah,0Eh
+021D:0858  26: 8A 05				mov	al,es:[di]
+021D:085B  E8 0012				call	sub_4			; (0870)
+021D:085E  58					pop	ax
+021D:085F  C3					retn
+021D:0860			loc_13:
+021D:0860  5E					pop	si
+021D:0861  2E: FF 0E 0804			dec	cs:data_43		; (021D:0804=0)
+021D:0866  C4					db	0C4h
+021D:0867  C4 42 F9				les	ax,dword ptr [bp+si-7]	; Load 32 bit ptr
+021D:086A  C3					retn
+021D:086B			loc_14:
+021D:086B  80 FC 0E				cmp	ah,0Eh
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 4
+
+021D:086E  75 28				jne	loc_15			; Jump if not equal
+
+				;ﬂﬂﬂﬂ External Entry into Subroutine ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+
+				sub_4:
+021D:0870  56					push	si
+021D:0871  2E: 8B 36 0802			mov	si,cs:data_42		; (021D:0802=0)
+021D:0876  81 FE 00A4				cmp	si,0A4h
+021D:087A  73 E4				jae	loc_13			; Jump if above or =
+021D:087C  1E					push	ds
+021D:087D  BE B000				mov	si,0B000h
+021D:0880  8E DE				mov	ds,si
+021D:0882  2E: 8B 36 0802			mov	si,cs:data_42		; (021D:0802=0)
+021D:0887  88 04				mov	[si],al
+021D:0889  46					inc	si
+021D:088A  2E: 89 36 0802			mov	cs:data_42,si		; (021D:0802=0)
+021D:088F  1F					pop	ds
+021D:0890  5E					pop	si
+021D:0891  F9					stc				; Set carry flag
+021D:0892  2E: FF 0E 0804			dec	cs:data_43		; (021D:0804=0)
+021D:0897  C3					retn
+021D:0898			loc_15:
+021D:0898  50					push	ax
+021D:0899  B8 13FE				mov	ax,13FEh
+021D:089C  C4					db	0C4h
+021D:089D  C4 42 58				les	ax,dword ptr [bp+si+58h]	; Load 32 bit ptr
+021D:08A0  F8					clc				; Clear carry flag
+021D:08A1  2E: FF 0E 0804			dec	cs:data_43		; (021D:0804=0)
+021D:08A6  C3					retn
+				sub_3		endp
+
+021D:08A7  00			data_44		db	0
+021D:08A8  00			data_45		db	0
+021D:08A9  2E: 80 3E 08A7 02			cmp	cs:data_44,2		; (021D:08A7=0)
+021D:08AF  75 05				jne	loc_16			; Jump if not equal
+021D:08B1  E8 FF52				call	sub_3			; (0806)
+021D:08B4  72 5F				jc	loc_22			; Jump if carry Set
+021D:08B6			loc_16:
+021D:08B6  2E: 80 3E 08A7 01			cmp	cs:data_44,1		; (021D:08A7=0)
+021D:08BC  74 5D				je	loc_24			; Jump if equal
+021D:08BE  80 FC 00				cmp	ah,0
+021D:08C1  74 30				je	loc_20			; Jump if equal
+021D:08C3  80 FC 1C				cmp	ah,1Ch
+021D:08C6  77 0B				ja	loc_17			; Jump if above
+021D:08C8  80 FC 04				cmp	ah,4
+021D:08CB  74 20				je	loc_19			; Jump if equal
+021D:08CD  C4					db	0C4h
+021D:08CE  C4 42 EB				les	ax,dword ptr [bp+si-15h]	; Load 32 bit ptr
+021D:08D1  43					inc	bx
+021D:08D2  90					nop
+021D:08D3			loc_17:
+021D:08D3  80 FC 4F				cmp	ah,4Fh			; 'O'
+021D:08D6  75 06				jne	loc_18			; Jump if not equal
+021D:08D8  C4					db	0C4h
+021D:08D9  C4 BE 73EB				les	di,dword ptr [bp+73EBh]	; Load 32 bit ptr
+021D:08DD  90					nop
+021D:08DE			loc_18:
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 5
+
+021D:08DE  80 FC F0				cmp	ah,0F0h
+021D:08E1  72 35				jb	loc_23			; Jump if below
+021D:08E3  80 FC F7				cmp	ah,0F7h
+021D:08E6  76 05				jbe	loc_19			; Jump if below or =
+021D:08E8  80 FC FA				cmp	ah,0FAh
+021D:08EB  75 2B				jne	loc_23			; Jump if not equal
+021D:08ED			loc_19:
+021D:08ED  C4					db	0C4h
+021D:08EE  C4 BE 23EB				les	di,dword ptr [bp+23EBh]	; Load 32 bit ptr
+021D:08F2  90					nop
+021D:08F3			loc_20:
+021D:08F3  2E: C6 06 08A8 01			mov	cs:data_45,1		; (021D:08A8=0)
+021D:08F9  C4					db	0C4h
+021D:08FA  C4 BE 9090				les	di,dword ptr [bp-6F70h]	; Load 32 bit ptr
+021D:08FE  50					push	ax
+021D:08FF  25 007F				and	ax,7Fh
+021D:0902  3C 03				cmp	al,3
+021D:0904  76 08				jbe	loc_21			; Jump if below or =
+021D:0906  3C 07				cmp	al,7
+021D:0908  74 04				je	loc_21			; Jump if equal
+021D:090A  58					pop	ax
+021D:090B  EB 0E				jmp	short loc_24		; (091B)
+021D:090D  90					nop
+021D:090E			loc_21:
+021D:090E  58					pop	ax
+021D:090F  2E: C6 06 08A8 00			mov	cs:data_45,0		; (021D:08A8=0)
+021D:0915			loc_22:
+021D:0915  E9 FD34				jmp	$-2C9h
+021D:0918			loc_23:
+021D:0918  F9					stc				; Set carry flag
+021D:0919  EB FA				jmp	short loc_22		; (0915)
+021D:091B			loc_24:
+021D:091B  2E: C6 06 08A8 00			mov	cs:data_45,0		; (021D:08A8=0)
+021D:0921  3D 13FF				cmp	ax,13FFh
+021D:0924  74 2F				je	loc_28			; Jump if equal
+021D:0926  80 FC F0				cmp	ah,0F0h
+021D:0929  72 0D				jb	loc_25			; Jump if below
+021D:092B  80 FC F7				cmp	ah,0F7h
+021D:092E  76 BD				jbe	loc_19			; Jump if below or =
+021D:0930  80 FC FA				cmp	ah,0FAh
+021D:0933  74 B8				je	loc_19			; Jump if equal
+021D:0935  EB 19				jmp	short loc_27		; (0950)
+021D:0937  90					nop
+021D:0938			loc_25:
+021D:0938  80 FC 04				cmp	ah,4
+021D:093B  74 B0				je	loc_19			; Jump if equal
+021D:093D  80 FC 00				cmp	ah,0
+021D:0940  75 06				jne	loc_26			; Jump if not equal
+021D:0942  C4					db	0C4h
+021D:0943  C4 BE 09EB				les	di,dword ptr [bp+9EBh]	; Load 32 bit ptr
+021D:0947  90					nop
+021D:0948			loc_26:
+021D:0948  80 FC 11				cmp	ah,11h
+021D:094B  75 03				jne	loc_27			; Jump if not equal
+021D:094D  C4					db	0C4h
+021D:094E  C4 BE BEEA				les	di,dword ptr [bp-4116h]	; Load 32 bit ptr
+021D:0952  1F					pop	ds
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 6
+
+021D:0953  00 C0				add	al,al
+021D:0955			loc_28:
+021D:0955  56					push	si
+021D:0956  57					push	di
+021D:0957  55					push	bp
+
+021D:0958			locloop_29:
+021D:0958  BA 0046				mov	dx,46h
+021D:095B  52					push	dx
+021D:095C  0E					push	cs
+021D:095D  BB 096C				mov	bx,96Ch
+021D:0960  53					push	bx
+021D:0961  BB 0007				mov	bx,7
+021D:0964  B4 0E				mov	ah,0Eh
+021D:0966  26: 8A 05				mov	al,es:[di]
+021D:0969  47					inc	di
+021D:096A  EB E4		;*		jmp	short loc_27		;*(0950)
+021D:096A  EB E4				db	0EBh,0E4h
+							                        ;* No entry point to code
+021D:096C  E2 EA				loop	locloop_29		; Loop if cx > 0
+
+021D:096E  5D					pop	bp
+021D:096F  5F					pop	di
+021D:0970  5E					pop	si
+021D:0971  B8 0001				mov	ax,1
+021D:0974			loc_30:
+021D:0974  EB 9F				jmp	short loc_22		; (0915)
+							                        ;* No entry point to code
+021D:0976  2E: 80 3E 08A7 02			cmp	cs:data_44,2		; (021D:08A7=0)
+021D:097C  75 05				jne	loc_31			; Jump if not equal
+021D:097E  E8 FE85				call	sub_3			; (0806)
+021D:0981  72 F1				jc	loc_30			; Jump if carry Set
+021D:0983			loc_31:
+021D:0983  2E: 80 3E 08A7 01			cmp	cs:data_44,1		; (021D:08A7=0)
+021D:0989  74 06				je	loc_32			; Jump if equal
+021D:098B  C4					db	0C4h
+021D:098C  C4 10				les	dx,dword ptr [bx+si]	; Load 32 bit ptr
+021D:098E  E9 FCBB				jmp	$-342h
+021D:0991			loc_32:
+021D:0991  80 FC 13				cmp	ah,13h
+021D:0994  75 04				jne	loc_33			; Jump if not equal
+021D:0996  3C FF				cmp	al,0FFh
+021D:0998  74 BB				je	loc_28			; Jump if equal
+021D:099A			loc_33:
+021D:099A  EA F000:F065		;*		jmp	far ptr loc_101		;*(F000:F065)
+021D:099A  EA					db	0EAh
+021D:099B  F065 F000				dw	0F065h, 0F000h
+021D:099F  CD 10				int	10h			; Video display   ah=functn 00h
+										;  set display mode in al
+021D:09A1  C4					db	0C4h
+021D:09A2  C4					db	0C4h
+021D:09A3  FE C4				inc	ah
+021D:09A5  C4 11				les	dx,dword ptr [bx+di]	; Load 32 bit ptr
+021D:09A7  E9 FCA2				jmp	$-35Bh
+021D:09AA  C4					db	0C4h
+							                        ;* No entry point to code
+021D:09AB  C4 12				les	dx,dword ptr [bp+si]	; Load 32 bit ptr
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 7
+
+021D:09AD  E9 FC9C				jmp	$-361h
+021D:09B0  C4					db	0C4h
+							                        ;* No entry point to code
+021D:09B1  C4 14				les	dx,dword ptr [si]	; Load 32 bit ptr
+021D:09B3  E9 FC96				jmp	$-367h
+021D:09B6  87 DB				xchg	bx,bx
+021D:09B8  0000			data_46		dw	0
+021D:09BA  00 00				add	[bx+si],al
+021D:09BC  0172			data_47		dw	172h
+021D:09BE  00 00				add	[bx+si],al
+021D:09C0  0032			data_48		dw	32h
+021D:09C2  00 00				add	[bx+si],al
+021D:09C4  1E					push	ds
+021D:09C5  53					push	bx
+021D:09C6  BB 0040				mov	bx,40h
+021D:09C9  8E DB				mov	ds,bx
+021D:09CB  80 FC 10				cmp	ah,10h
+021D:09CE  E8 FDE8				call	sub_1			; (07B9)
+021D:09D1  72 03				jc	loc_34			; Jump if carry Set
+021D:09D3  E9 00E0				jmp	loc_48			; (0AB6)
+021D:09D6			loc_34:
+021D:09D6  0A E4				or	ah,ah			; Zero ?
+021D:09D8  74 3E				jz	loc_39			; Jump if zero
+021D:09DA  FE CC				dec	ah
+021D:09DC  74 74				jz	loc_43			; Jump if zero
+021D:09DE  FE CC				dec	ah
+021D:09E0  74 11				jz	loc_36			; Jump if zero
+021D:09E2  FE CC				dec	ah
+021D:09E4  74 08				jz	loc_35			; Jump if zero
+021D:09E6  FE CC				dec	ah
+021D:09E8  74 04				jz	loc_35			; Jump if zero
+021D:09EA  FE CC				dec	ah
+021D:09EC  74 0A				jz	loc_37			; Jump if zero
+021D:09EE			loc_35:
+021D:09EE  5B					pop	bx
+021D:09EF  1F					pop	ds
+021D:09F0  E9 FC59				jmp	$-3A4h
+021D:09F3			loc_36:
+021D:09F3  A0 0017				mov	al,byte ptr ds:[17h]	; (0000:0017=2)
+021D:09F6  EB F6				jmp	short loc_35		; (09EE)
+021D:09F8			loc_37:
+021D:09F8  56					push	si
+021D:09F9  8B 1E 001C				mov	bx,word ptr ds:[1Ch]	; (0000:001C=3FFh)
+021D:09FD  8B F3				mov	si,bx
+021D:09FF  E8 01B9				call	sub_9			; (0BBB)
+021D:0A02  3B 1E 001A				cmp	bx,word ptr ds:[1Ah]	; (0000:001A=21Dh)
+021D:0A06  74 0B				je	loc_38			; Jump if equal
+021D:0A08  89 0C				mov	[si],cx
+021D:0A0A  89 1E 001C				mov	word ptr ds:[1Ch],bx	; (0000:001C=3FFh)
+021D:0A0E  B0 00				mov	al,0
+021D:0A10  5E					pop	si
+021D:0A11  EB DB				jmp	short loc_35		; (09EE)
+021D:0A13			loc_38:
+021D:0A13  B0 01				mov	al,1
+021D:0A15  5E					pop	si
+021D:0A16  EB D6				jmp	short loc_35		; (09EE)
+021D:0A18			loc_39:
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 8
+
+021D:0A18  8B 1E 001A				mov	bx,word ptr ds:[1Ah]	; (0000:001A=21Dh)
+021D:0A1C  3B 1E 001C				cmp	bx,word ptr ds:[1Ch]	; (0000:001C=3FFh)
+021D:0A20  75 13				jne	loc_41			; Jump if not equal
+021D:0A22  E8 FDB4				call	sub_2			; (07D9)
+021D:0A25  B8 9002				mov	ax,9002h
+021D:0A28  CD 15				int	15h			; General services, ah=func 90h
+										;  device busy, al=type,
+										;   es:bx=ptr of request block
+021D:0A2A			loc_40:
+021D:0A2A  E8 FD8C				call	sub_1			; (07B9)
+021D:0A2D  8B 1E 001A				mov	bx,word ptr ds:[1Ah]	; (0000:001A=21Dh)
+021D:0A31  3B 1E 001C				cmp	bx,word ptr ds:[1Ch]	; (0000:001C=3FFh)
+021D:0A35			loc_41:
+021D:0A35  E8 0190				call	sub_10			; (0BC8)
+021D:0A38  75 05				jnz	loc_42			; Jump if not zero
+021D:0A3A  E8 00E3				call	sub_5			; (0B20)
+021D:0A3D  EB EB				jmp	short loc_40		; (0A2A)
+021D:0A3F			loc_42:
+021D:0A3F  8B 07				mov	ax,[bx]
+021D:0A41  E8 0177				call	sub_9			; (0BBB)
+021D:0A44  89 1E 001A				mov	word ptr ds:[1Ah],bx	; (0000:001A=21Dh)
+021D:0A48  E8 0129				call	sub_8			; (0B74)
+021D:0A4B  72 DD				jc	loc_40			; Jump if carry Set
+021D:0A4D  E8 00FC				call	sub_6			; (0B4C)
+021D:0A50  EB 9C				jmp	short loc_35		; (09EE)
+021D:0A52			loc_43:
+021D:0A52  8B 1E 001A				mov	bx,word ptr ds:[1Ah]	; (0000:001A=21Dh)
+021D:0A56  3B 1E 001C				cmp	bx,word ptr ds:[1Ch]	; (0000:001C=3FFh)
+021D:0A5A  8B 07				mov	ax,[bx]
+021D:0A5C  E8 0169				call	sub_10			; (0BC8)
+021D:0A5F  74 2F				jz	loc_45			; Jump if zero
+021D:0A61  E8 00E8				call	sub_6			; (0B4C)
+021D:0A64  E8 010D				call	sub_8			; (0B74)
+021D:0A67  E8 FD6F				call	sub_2			; (07D9)
+021D:0A6A  73 45				jnc	loc_47			; Jump if carry=0
+021D:0A6C  E8 014C				call	sub_9			; (0BBB)
+021D:0A6F  89 1E 001A				mov	word ptr ds:[1Ah],bx	; (0000:001A=21Dh)
+021D:0A73  EB DD				jmp	short loc_43		; (0A52)
+021D:0A75			loc_44:
+021D:0A75  8B 1E 001A				mov	bx,word ptr ds:[1Ah]	; (0000:001A=21Dh)
+021D:0A79  3B 1E 001C				cmp	bx,word ptr ds:[1Ch]	; (0000:001C=3FFh)
+021D:0A7D  8B 07				mov	ax,[bx]
+021D:0A7F  E8 0146				call	sub_10			; (0BC8)
+021D:0A82  74 0C				jz	loc_45			; Jump if zero
+021D:0A84  E8 00C5				call	sub_6			; (0B4C)
+021D:0A87  E8 00D1				call	sub_7			; (0B5B)
+021D:0A8A  E8 FD4C				call	sub_2			; (07D9)
+021D:0A8D  EB 22				jmp	short loc_47		; (0AB1)
+021D:0A8F  90					nop
+021D:0A90			loc_45:
+021D:0A90  E8 FD46				call	sub_2			; (07D9)
+021D:0A93  50					push	ax
+021D:0A94  9F					lahf				; Load ah from flags
+021D:0A95  50					push	ax
+021D:0A96  2E: A1 09B8				mov	ax,cs:data_46		; (021D:09B8=0)
+021D:0A9A  2E: 3B 06 09C0			cmp	ax,cs:data_48		; (021D:09C0=32h)
+021D:0A9F  72 08				jb	loc_46			; Jump if below
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 9
+
+021D:0AA1  B4 01				mov	ah,1
+021D:0AA3  C4					db	0C4h
+021D:0AA4  C4 16 06EB				les	dx,dword ptr ds:[6EBh]	; (0000:06EB=55AAh) Load 32 bit ptr
+021D:0AA8  90					nop
+021D:0AA9			loc_46:
+021D:0AA9  2E: FF 06 09BC			inc	cs:data_47		; (021D:09BC=238h)
+021D:0AAE  58					pop	ax
+021D:0AAF  9E					sahf				; Store ah into flags
+021D:0AB0  58					pop	ax
+021D:0AB1			loc_47:
+021D:0AB1  5B					pop	bx
+021D:0AB2  1F					pop	ds
+021D:0AB3  CA 0002				retf	2			; Return far
+021D:0AB6			loc_48:
+021D:0AB6  80 EC 10				sub	ah,10h
+021D:0AB9  74 2C				jz	loc_50			; Jump if zero
+021D:0ABB  FE CC				dec	ah
+021D:0ABD  74 B6				jz	loc_44			; Jump if zero
+021D:0ABF  FE CC				dec	ah
+021D:0AC1  74 03				jz	loc_49			; Jump if zero
+021D:0AC3  E9 FF28				jmp	loc_35			; (09EE)
+021D:0AC6			loc_49:
+021D:0AC6  A0 0018				mov	al,byte ptr data_2+2	; (021D:0018=0)
+021D:0AC9  8A E0				mov	ah,al
+021D:0ACB  24 04				and	al,4
+021D:0ACD  51					push	cx
+021D:0ACE  B1 05				mov	cl,5
+021D:0AD0  D2 E0				shl	al,cl			; Shift w/zeros fill
+021D:0AD2  59					pop	cx
+021D:0AD3  80 E4 73				and	ah,73h			; 's'
+021D:0AD6  0A C4				or	al,ah
+021D:0AD8  8A 26 0096				mov	ah,byte ptr ds:[96h]	; (021D:0096=0)
+021D:0ADC  80 E4 0C				and	ah,0Ch
+021D:0ADF  0A E0				or	ah,al
+021D:0AE1  A0 0017				mov	al,byte ptr data_2+1	; (021D:0017=0)
+021D:0AE4  E9 FF07				jmp	loc_35			; (09EE)
+021D:0AE7			loc_50:
+021D:0AE7  8B 1E 001A				mov	bx,word ptr ds:[1Ah]	; (021D:001A=0AE9Ch)
+021D:0AEB  3B 1E 001C				cmp	bx,word ptr data_5+2	; (021D:001C=148Fh)
+021D:0AEF  75 13				jne	loc_52			; Jump if not equal
+021D:0AF1  E8 FCE5				call	sub_2			; (07D9)
+021D:0AF4  B8 9002				mov	ax,9002h
+021D:0AF7  CD 15				int	15h			; General services, ah=func 90h
+										;  device busy, al=type,
+										;   es:bx=ptr of request block
+021D:0AF9			loc_51:
+021D:0AF9  E8 FCBD				call	sub_1			; (07B9)
+021D:0AFC  8B 1E 001A				mov	bx,word ptr ds:[1Ah]	; (021D:001A=0AE9Ch)
+021D:0B00  3B 1E 001C				cmp	bx,word ptr data_5+2	; (021D:001C=148Fh)
+021D:0B04			loc_52:
+021D:0B04  E8 00C1				call	sub_10			; (0BC8)
+021D:0B07  75 05				jnz	loc_53			; Jump if not zero
+021D:0B09  E8 0014				call	sub_5			; (0B20)
+021D:0B0C  EB EB				jmp	short loc_51		; (0AF9)
+021D:0B0E			loc_53:
+021D:0B0E  8B 07				mov	ax,[bx]
+021D:0B10  E8 00A8				call	sub_9			; (0BBB)
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 10
+
+021D:0B13  89 1E 001A				mov	word ptr ds:[1Ah],bx	; (021D:001A=0AE9Ch)
+021D:0B17  E8 0041				call	sub_7			; (0B5B)
+021D:0B1A  E8 002F				call	sub_6			; (0B4C)
+021D:0B1D  E9 FECE				jmp	loc_35			; (09EE)
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_5		proc	near
+021D:0B20  50					push	ax
+021D:0B21  E8 FCB5				call	sub_2			; (07D9)
+021D:0B24  B4 02				mov	ah,2
+021D:0B26  C4					db	0C4h
+021D:0B27  C4 16 1E8B				les	dx,dword ptr ds:[1E8Bh]	; (0000:1E8B=0) Load 32 bit ptr
+021D:0B2B  1A 00				sbb	al,[bx+si]
+021D:0B2D  3B 1E 001C				cmp	bx,word ptr ds:[1Ch]	; (0000:001C=3FFh)
+021D:0B31  75 17				jne	loc_56			; Jump if not equal
+021D:0B33  2E: A1 09B8				mov	ax,cs:data_46		; (021D:09B8=0)
+021D:0B37  2E: 3B 06 09C0			cmp	ax,cs:data_48		; (021D:09C0=32h)
+021D:0B3C  73 07				jae	loc_55			; Jump if above or =
+021D:0B3E  2E: FF 06 09BC			inc	cs:data_47		; (021D:09BC=2B2h)
+021D:0B43  EB E4		;*		jmp	short loc_54		;*(0B29)
+021D:0B43  EB E4				db	0EBh,0E4h
+021D:0B45			loc_55:
+021D:0B45  B4 01				mov	ah,1
+021D:0B47  C4					db	0C4h
+021D:0B48  C4 16 C358				les	dx,dword ptr ds:[0C358h]	; (0000:C358=0) Load 32 bit ptr
+
+				;ﬂﬂﬂﬂ External Entry into Subroutine ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+
+				sub_6:
+021D:0B4C  2E: C7 06 09B8 0000			mov	cs:data_46,0		; (021D:09B8=0)
+021D:0B53  2E: C7 06 09BC 0000			mov	cs:data_47,0		; (021D:09BC=2C2h)
+021D:0B5A  C3					retn
+				sub_5		endp
+
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_7		proc	near
+021D:0B5B  53					push	bx
+021D:0B5C  50					push	ax
+021D:0B5D  9F					lahf				; Load ah from flags
+021D:0B5E  8B D8				mov	bx,ax
+021D:0B60  58					pop	ax
+021D:0B61  53					push	bx
+021D:0B62  3C F0				cmp	al,0F0h
+021D:0B64  75 06				jne	loc_57			; Jump if not equal
+021D:0B66  0A E4				or	ah,ah			; Zero ?
+021D:0B68  74 02				jz	loc_57			; Jump if zero
+021D:0B6A  32 C0				xor	al,al			; Zero register
+021D:0B6C			loc_57:
+021D:0B6C  8B D8				mov	bx,ax
+021D:0B6E  58					pop	ax
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 11
+
+021D:0B6F  9E					sahf				; Store ah into flags
+021D:0B70  8B C3				mov	ax,bx
+021D:0B72  5B					pop	bx
+021D:0B73  C3					retn
+				sub_7		endp
+
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_8		proc	near
+021D:0B74  53					push	bx
+021D:0B75  50					push	ax
+021D:0B76  9F					lahf				; Load ah from flags
+021D:0B77  8B D8				mov	bx,ax
+021D:0B79  58					pop	ax
+021D:0B7A  53					push	bx
+021D:0B7B  80 FC E0				cmp	ah,0E0h
+021D:0B7E  75 0F				jne	loc_58			; Jump if not equal
+021D:0B80  B4 1C				mov	ah,1Ch
+021D:0B82  3C 0D				cmp	al,0Dh
+021D:0B84  74 23				je	loc_60			; Jump if equal
+021D:0B86  3C 0A				cmp	al,0Ah
+021D:0B88  74 1F				je	loc_60			; Jump if equal
+021D:0B8A  B4 35				mov	ah,35h			; '5'
+021D:0B8C  EB 1B				jmp	short loc_60		; (0BA9)
+021D:0B8E  90					nop
+021D:0B8F			loc_58:
+021D:0B8F  80 FC 84				cmp	ah,84h
+021D:0B92  77 1E				ja	loc_61			; Jump if above
+021D:0B94  3C F0				cmp	al,0F0h
+021D:0B96  75 07				jne	loc_59			; Jump if not equal
+021D:0B98  0A E4				or	ah,ah			; Zero ?
+021D:0B9A  74 0D				jz	loc_60			; Jump if zero
+021D:0B9C  EB 14				jmp	short loc_61		; (0BB2)
+021D:0B9E  90					nop
+021D:0B9F			loc_59:
+021D:0B9F  3C E0				cmp	al,0E0h
+021D:0BA1  75 06				jne	loc_60			; Jump if not equal
+021D:0BA3  0A E4				or	ah,ah			; Zero ?
+021D:0BA5  74 02				jz	loc_60			; Jump if zero
+021D:0BA7  32 C0				xor	al,al			; Zero register
+021D:0BA9			loc_60:
+021D:0BA9  8B D8				mov	bx,ax
+021D:0BAB  58					pop	ax
+021D:0BAC  9E					sahf				; Store ah into flags
+021D:0BAD  8B C3				mov	ax,bx
+021D:0BAF  5B					pop	bx
+021D:0BB0  F8					clc				; Clear carry flag
+021D:0BB1  C3					retn
+021D:0BB2			loc_61:
+021D:0BB2  8B D8				mov	bx,ax
+021D:0BB4  58					pop	ax
+021D:0BB5  9E					sahf				; Store ah into flags
+021D:0BB6  8B C3				mov	ax,bx
+021D:0BB8  5B					pop	bx
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 12
+
+021D:0BB9  F9					stc				; Set carry flag
+021D:0BBA  C3					retn
+				sub_8		endp
+
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_9		proc	near
+021D:0BBB  43					inc	bx
+021D:0BBC  43					inc	bx
+021D:0BBD  3B 1E 0082				cmp	bx,word ptr ds:[82h]	; (0000:0082=0A7h)
+021D:0BC1  75 04				jne	loc_62			; Jump if not equal
+021D:0BC3  8B 1E 0080				mov	bx,word ptr ds:[80h]	; (0000:0080=1072h)
+021D:0BC7			loc_62:
+021D:0BC7  C3					retn
+				sub_9		endp
+
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_10		proc	near
+021D:0BC8  53					push	bx
+021D:0BC9  51					push	cx
+021D:0BCA  50					push	ax
+021D:0BCB  9F					lahf				; Load ah from flags
+021D:0BCC  50					push	ax
+021D:0BCD  A0 0017				mov	al,byte ptr ds:[17h]	; (0000:0017=2)
+021D:0BD0  24 70				and	al,70h			; 'p'
+021D:0BD2  B1 04				mov	cl,4
+021D:0BD4  D2 E8				shr	al,cl			; Shift w/zeros fill
+021D:0BD6  24 07				and	al,7
+021D:0BD8  8A 1E 0097				mov	bl,byte ptr ds:[97h]	; (0000:0097=0)
+021D:0BDC  32 D8				xor	bl,al
+021D:0BDE  80 E3 07				and	bl,7
+021D:0BE1  74 25				jz	loc_63			; Jump if zero
+021D:0BE3  F6 06 0097 40			test	byte ptr ds:[97h],40h	; (0000:0097=0) '@'
+021D:0BE8  75 1E				jnz	loc_63			; Jump if not zero
+021D:0BEA  80 0E 0097 40			or	byte ptr ds:[97h],40h	; (0000:0097=0) '@'
+021D:0BEF  D2 E3				shl	bl,cl			; Shift w/zeros fill
+021D:0BF1  0A C3				or	al,bl
+021D:0BF3  B4 03				mov	ah,3
+021D:0BF5  C4					db	0C4h
+021D:0BF6  C4 16 2680				les	dx,dword ptr ds:[2680h]	; (0000:2680=0E903h) Load 32 bit ptr
+021D:0BFA  97					xchg	di,ax
+021D:0BFB  00 F8				add	al,bh
+021D:0BFD  24 0F				and	al,0Fh
+021D:0BFF  08 06 0097				or	byte ptr ds:[97h],al	; (0000:0097=0)
+021D:0C03  80 26 0097 BF			and	byte ptr ds:[97h],0BFh	; (0000:0097=0)
+021D:0C08			loc_63:
+021D:0C08  58					pop	ax
+021D:0C09  9E					sahf				; Store ah into flags
+021D:0C0A  58					pop	ax
+021D:0C0B  59					pop	cx
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 13
+
+021D:0C0C  5B					pop	bx
+021D:0C0D  C3					retn
+				sub_10		endp
+
+021D:0C0E  C4					db	0C4h
+							                        ;* No entry point to code
+021D:0C0F  C4 18				les	bx,dword ptr [bx+si]	; Load 32 bit ptr
+021D:0C11  E9 FA38				jmp	$-5C5h
+021D:0C14  C4					db	0C4h
+							                        ;* No entry point to code
+021D:0C15  C4 19				les	bx,dword ptr [bx+di]	; Load 32 bit ptr
+021D:0C17  E9 FA32				jmp	$-5CBh
+021D:0C1A  3B3B			data_49		dw	3B3Bh
+021D:0C1C  000F			data_50		dw	0Fh
+021D:0C1E  01			data_51		db	1
+021D:0C1F  E8 FBB7				call	sub_2			; (07D9)
+021D:0C22  80 FC 02				cmp	ah,2
+021D:0C25  72 06				jb	loc_64			; Jump if below
+021D:0C27  C4					db	0C4h
+021D:0C28  C4 1A				les	bx,dword ptr [bp+si]	; Load 32 bit ptr
+021D:0C2A  E9 FA1F				jmp	$-5DEh
+021D:0C2D			loc_64:
+021D:0C2D  1E					push	ds
+021D:0C2E  53					push	bx
+021D:0C2F  50					push	ax
+021D:0C30  B8 0040				mov	ax,40h
+021D:0C33  8E D8				mov	ds,ax
+021D:0C35  58					pop	ax
+021D:0C36  E8 FB80				call	sub_1			; (07B9)
+021D:0C39  0A E4				or	ah,ah			; Zero ?
+021D:0C3B  75 3F				jnz	loc_67			; Jump if not zero
+021D:0C3D			loc_65:
+021D:0C3D  A0 0070				mov	al,byte ptr ds:[70h]	; (0040:0070=0)
+021D:0C40  8B 0E 006E				mov	cx,word ptr ds:[6Eh]	; (0040:006E=0Fh)
+021D:0C44  8B 16 006C				mov	dx,word ptr ds:[6Ch]	; (0040:006C=3B3Ch)
+021D:0C48  2E: 39 0E 0C1C			cmp	cs:data_50,cx		; (021D:0C1C=0Fh)
+021D:0C4D  75 35				jne	loc_68			; Jump if not equal
+021D:0C4F  2E: 8B 1E 0C1A			mov	bx,cs:data_49		; (021D:0C1A=3B3Bh)
+021D:0C54  3B DA				cmp	bx,dx
+021D:0C56  74 05				je	loc_66			; Jump if equal
+021D:0C58  43					inc	bx
+021D:0C59  3B DA				cmp	bx,dx
+021D:0C5B  75 27				jne	loc_68			; Jump if not equal
+021D:0C5D			loc_66:
+021D:0C5D  2E: FE 06 0C1E			inc	cs:data_51		; (021D:0C1E=1)
+021D:0C62  2E: 80 3E 0C1E 10			cmp	cs:data_51,10h		; (021D:0C1E=1)
+021D:0C68  72 20				jb	loc_69			; Jump if below
+021D:0C6A  E8 FB6C				call	sub_2			; (07D9)
+021D:0C6D  33 C0				xor	ax,ax			; Zero register
+021D:0C6F  2E: FF 0E 0C1A			dec	cs:data_49		; (021D:0C1A=3B3Bh)
+021D:0C74  C4					db	0C4h
+021D:0C75  C4 5A E8				les	bx,dword ptr [bp+si-18h]	; Load 32 bit ptr
+021D:0C78  3F					aas				; Ascii adjust
+021D:0C79  FB					sti				; Enable interrupts
+021D:0C7A  EB C1				jmp	short loc_65		; (0C3D)
+021D:0C7C			loc_67:
+021D:0C7C  89 16 006C				mov	word ptr ds:[6Ch],dx	; (0040:006C=3B3Ch)
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 14
+
+021D:0C80  89 0E 006E				mov	word ptr ds:[6Eh],cx	; (0040:006E=0Fh)
+021D:0C84			loc_68:
+021D:0C84  2E: C6 06 0C1E 00			mov	cs:data_51,0		; (021D:0C1E=1)
+021D:0C8A			loc_69:
+021D:0C8A  2E: 89 16 0C1A			mov	cs:data_49,dx		; (021D:0C1A=3B3Bh)
+021D:0C8F  2E: 89 0E 0C1C			mov	cs:data_50,cx		; (021D:0C1C=0Fh)
+021D:0C94  C6 06 0070 00			mov	byte ptr ds:[70h],0	; (0040:0070=0)
+021D:0C99  5B					pop	bx
+021D:0C9A  1F					pop	ds
+021D:0C9B  E9 F9AE				jmp	$-64Fh
+021D:0C9E  C4					db	0C4h
+							                        ;* No entry point to code
+021D:0C9F  C4 1E A8E9				les	bx,dword ptr ds:[0A8E9h]	; (021D:A8E9=0) Load 32 bit ptr
+021D:0CA3  F9					stc				; Set carry flag
+021D:0CA4  C4					db	0C4h
+021D:0CA5  C4 70 E9				les	si,dword ptr [bx+si-17h]	; Load 32 bit ptr
+021D:0CA8  A2 E8F9				mov	byte ptr ds:[0E8F9h],al	; (021D:E8F9=7)
+021D:0CAB  2C FB				sub	al,0FBh
+021D:0CAD  CD 4A				int	4Ah			; RTC Alarm occurred
+021D:0CAF  EB 01				jmp	short $+3		; delay for I/O
+021D:0CB1  90					nop
+021D:0CB2  EB 01				jmp	short $+3		; delay for I/O
+021D:0CB4  90					nop
+021D:0CB5  EB 01				jmp	short $+3		; delay for I/O
+021D:0CB7  90					nop
+021D:0CB8  E8 FAFE				call	sub_1			; (07B9)
+021D:0CBB  C4					db	0C4h
+021D:0CBC  C4					db	0C4h
+021D:0CBD  FE C4				inc	ah
+021D:0CBF  C4 71 CD				les	si,dword ptr [bx+di-33h]	; Load 32 bit ptr
+021D:0CC2  0A E9				or	ch,cl
+021D:0CC4  86 F9				xchg	bh,cl
+021D:0CC6  C4					db	0C4h
+021D:0CC7			loc_70:
+021D:0CC7  C4 75 CD				les	si,dword ptr [di-33h]	; Load 32 bit ptr
+021D:0CCA  02 E9				add	ch,cl
+021D:0CCC  7E F9				jle	loc_70			; Jump if < or =
+021D:0CCE  E8 FB08				call	sub_2			; (07D9)
+021D:0CD1  EB 00				jmp	short $+2		; delay for I/O
+021D:0CD3  EB 00				jmp	short $+2		; delay for I/O
+021D:0CD5  EB 00				jmp	short $+2		; delay for I/O
+021D:0CD7  C4					db	0C4h
+021D:0CD8  C4					db	0C4h
+021D:0CD9  FE 00				inc	byte ptr [bx+si]
+021D:0CDB  00 00				add	[bx+si],al
+021D:0CDD  00 E3				add	bl,ah
+021D:0CDF  1D EC44				sbb	ax,0EC44h
+021D:0CE2  02 4E 00				add	cl,[bp]
+021D:0CE5  EB 1D				jmp	short loc_71		; (0D04)
+							                        ;* No entry point to code
+021D:0CE7  FF 48 49				dec	word ptr [bx+si+49h]
+021D:0CEA  4D					dec	bp
+021D:0CEB  45					inc	bp
+021D:0CEC  4D					dec	bp
+021D:0CED  20 20				and	[bx+si],ah
+021D:0CEF  20 24				and	[si],ah
+021D:0CF1  00 70 00		;*		add	[bx+si+0],dh
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 15
+
+021D:0CF1  00 70 00				db	 00h, 70h, 00h
+021D:0CF4  00 A0 0041				add	byte ptr ds:[41h][bx+si],ah	; (021D:0041=18h)
+021D:0CF8  4C					dec	sp
+021D:0CF9  00 58 4D				add	[bx+si+4Dh],bl
+021D:0CFC  53					push	bx
+021D:0CFD  58					pop	ax
+021D:0CFE  58					pop	ax
+021D:0CFF  58					pop	ax
+021D:0D00  58					pop	ax
+021D:0D01  30 DE				xor	dh,bl
+021D:0D03  04 74				add	al,74h			; 't'
+021D:0D05  00 82 FB04				add	[bp+si-4FCh],al
+021D:0D09  8D 54 00				lea	dx,[si+0]		; Load effective addr
+021D:0D0C  00 00				add	[bx+si],al
+021D:0D0E  42					inc	dx
+021D:0D0F  05 021D				add	ax,21Dh
+021D:0D12  A4					movsb				; Mov [si] to es:[di]
+021D:0D13  10 A7 0100				adc	byte ptr ds:[100h][bx],ah	; (021D:0100=28h)
+021D:0D17  01 01				add	[bx+di],ax
+021D:0D19  01 00				add	[bx+si],ax
+021D:0D1B  01 00				add	[bx+si],ax
+021D:0D1D  01 00				add	[bx+si],ax
+021D:0D1F  01 00				add	[bx+si],ax
+021D:0D21  000A[00]				db	10 dup (0)
+021D:0D2B  02 01				add	al,[bx+di]
+021D:0D2D  00					db	0
+021D:0D2E  00 00				add	[bx+si],al
+021D:0D30  00 2E 1E89				add	byte ptr ds:[1E89h],ch	; (021D:1E89=7Dh)
+021D:0D34  16					push	ss
+021D:0D35  00 2E 068C				add	byte ptr ds:[68Ch],ch	; (021D:068C=2)
+021D:0D39  18 00				sbb	[bx+si],al
+021D:0D3B  CB					retf
+							                        ;* No entry point to code
+021D:0D3C  53					push	bx
+021D:0D3D  1E					push	ds
+021D:0D3E  2E: C5 1E 0016			lds	bx,dword ptr cs:[16h]	; (021D:0016=0) Load 32 bit ptr
+021D:0D43  80 7F 02 10				cmp	byte ptr [bx+2],10h
+021D:0D47  C7 47 03 0100			mov	word ptr [bx+3],100h
+021D:0D4C  76 05				jbe	loc_72			; Jump if below or =
+021D:0D4E  81 4F 03 8003			or	word ptr [bx+3],8003h
+021D:0D53			loc_72:
+021D:0D53  1F					pop	ds
+021D:0D54  5B					pop	bx
+021D:0D55  CB					retf
+							                        ;* No entry point to code
+021D:0D56  E8 03DB				call	$+3DEh
+021D:0D59  80 FC 43				cmp	ah,43h			; 'C'
+021D:0D5C  75 15				jne	loc_74			; Jump if not equal
+021D:0D5E  0A C0				or	al,al			; Zero ?
+021D:0D60  75 05				jnz	loc_73			; Jump if not zero
+021D:0D62  B0 80				mov	al,80h
+021D:0D64  E9 03F5				jmp	$+3F8h
+021D:0D67			loc_73:
+021D:0D67  3C 10				cmp	al,10h
+021D:0D69  75 08				jne	loc_74			; Jump if not equal
+021D:0D6B  0E					push	cs
+021D:0D6C  07					pop	es
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 16
+
+021D:0D6D  BB 00AF				mov	bx,0AFh
+021D:0D70  E9 03E9				jmp	$+3ECh
+021D:0D73			loc_74:
+021D:0D73  E8 039E				call	$+3A1h
+021D:0D76  2E: FF 2E 0022			jmp	dword ptr cs:[22h]	; (021D:0022=0FFh)
+							                        ;* No entry point to code
+021D:0D7B  12 A0 0265				adc	ah,byte ptr ds:[265h][bx+si]	; (021D:0265=0)
+021D:0D7F  98					cbw				; Convrt byte to word
+021D:0D80  02 B2 D402				add	dh,[bp+si-2BFEh]
+021D:0D84  02 F6				add	dh,dh
+021D:0D86  02 30				add	dh,[bx+si]
+021D:0D88  03 99 2B03				add	bx,word ptr ds:[2B03h][bx+di]	; (021D:2B03=0A000h)
+021D:0D8C  A0 A03C				mov	al,byte ptr ds:[0A03Ch]	; (021D:A03C=0)
+021D:0D8F  94					xchg	sp,ax
+021D:0D90  A0 A264				mov	al,byte ptr ds:[0A264h]	; (021D:A264=0)
+021D:0D93  CF					iret				; Interrupt return
+							                        ;* No entry point to code
+021D:0D94  A0 A0FF				mov	al,byte ptr ds:[0A0FFh]	; (021D:A0FF=0)
+021D:0D97  23 A1 A159				and	sp,word ptr ds:[0A159h][bx+di]	; (021D:A159=0)
+021D:0D9B  11 A2 A216				adc	[bp+si-5DEAh],sp
+021D:0D9F  EB 03				jmp	short loc_75		; (0DA4)
+021D:0DA1  90					nop
+021D:0DA2  90					nop
+021D:0DA3  90					nop
+021D:0DA4			loc_75:
+021D:0DA4  51					push	cx
+021D:0DA5  56					push	si
+021D:0DA6  57					push	di
+021D:0DA7  1E					push	ds
+021D:0DA8  06					push	es
+021D:0DA9  9C					pushf				; Push flags
+021D:0DAA  FC					cld				; Clear direction
+021D:0DAB  1E					push	ds
+021D:0DAC  07					pop	es
+021D:0DAD  0E					push	cs
+021D:0DAE  1F					pop	ds
+021D:0DAF  50					push	ax
+021D:0DB0  0A E4				or	ah,ah			; Zero ?
+021D:0DB2  74 31				jz	loc_78			; Jump if zero
+021D:0DB4  80 FC 12				cmp	ah,12h
+021D:0DB7  72 07				jb	loc_76			; Jump if below
+021D:0DB9  58					pop	ax
+021D:0DBA  33 C0				xor	ax,ax			; Zero register
+021D:0DBC  B3 80				mov	bl,80h
+021D:0DBE  EB 72				jmp	short loc_82		; (0E32)
+021D:0DC0			loc_76:
+021D:0DC0  9C					pushf				; Push flags
+021D:0DC1  E8 0350				call	$+353h
+021D:0DC4  83 3E 0020 00			cmp	word ptr data_7+2,0	; (021D:0020=0A3B9h)
+021D:0DC9  75 05				jne	loc_77			; Jump if not equal
+021D:0DCB  52					push	dx
+021D:0DCC  E8 0076				call	sub_12			; (0E45)
+021D:0DCF  5A					pop	dx
+021D:0DD0			loc_77:
+021D:0DD0  0E					push	cs
+021D:0DD1  FF 16 0014				call	word ptr ds:[14h]	; (021D:0014=0E0Dh)
+021D:0DD5  80 3E 002C 00			cmp	byte ptr ds:[2Ch],0	; (021D:002C=39h)
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 17
+
+021D:0DDA  74 09				je	loc_78			; Jump if equal
+021D:0DDC  58					pop	ax
+021D:0DDD  33 C0				xor	ax,ax			; Zero register
+021D:0DDF  B3 81				mov	bl,81h
+021D:0DE1  33 D2				xor	dx,dx			; Zero register
+021D:0DE3  EB 4D				jmp	short loc_82		; (0E32)
+021D:0DE5			loc_78:
+021D:0DE5  58					pop	ax
+021D:0DE6  50					push	ax
+021D:0DE7  8A C4				mov	al,ah
+021D:0DE9  32 E4				xor	ah,ah			; Zero register
+021D:0DEB  D1 E0				shl	ax,1			; Shift w/zeros fill
+021D:0DED  8B F8				mov	di,ax
+021D:0DEF  58					pop	ax
+021D:0DF0  8B BD 008B				mov	di,word ptr ds:[8Bh][di]	; (021D:008B=504Fh)
+021D:0DF4  0B FF				or	di,di			; Zero ?
+021D:0DF6  79 38				jns	loc_81			; Jump if not sign
+021D:0DF8  80 3E 002B 00			cmp	byte ptr ds:[2Bh],0	; (021D:002B=38h)
+021D:0DFD  74 12				je	loc_79			; Jump if equal
+021D:0DFF  56					push	si
+021D:0E00  57					push	di
+021D:0E01  50					push	ax
+021D:0E02  53					push	bx
+021D:0E03  51					push	cx
+021D:0E04  E8 01DF				call	sub_14			; (0FE6)
+021D:0E07  3D 0001				cmp	ax,1
+021D:0E0A  59					pop	cx
+021D:0E0B  5B					pop	bx
+021D:0E0C  58					pop	ax
+021D:0E0D  5F					pop	di
+021D:0E0E  5E					pop	si
+021D:0E0F  75 17				jnz	loc_80			; Jump if not zero
+021D:0E11			loc_79:
+021D:0E11  0E E8 002A				callf	sub_11			; (0E3F)
+021D:0E15  80 3E 002B 00			cmp	byte ptr ds:[2Bh],0	; (021D:002B=38h)
+021D:0E1A  74 16				je	loc_82			; Jump if equal
+021D:0E1C  50					push	ax
+021D:0E1D  53					push	bx
+021D:0E1E  E8 01FF				call	$+202h
+021D:0E21  3D 0001				cmp	ax,1
+021D:0E24  5B					pop	bx
+021D:0E25  58					pop	ax
+021D:0E26  74 0A				jz	loc_82			; Jump if zero
+021D:0E28			loc_80:
+021D:0E28  33 C0				xor	ax,ax			; Zero register
+021D:0E2A  33 D2				xor	dx,dx			; Zero register
+021D:0E2C  B3 82				mov	bl,82h
+021D:0E2E  EB 02				jmp	short loc_82		; (0E32)
+021D:0E30			loc_81:
+021D:0E30  FF D7				call	di			;*
+021D:0E32			loc_82:
+021D:0E32  0E					push	cs
+021D:0E33  FF 16 0014				call	word ptr ds:[14h]	; (021D:0014=0E0Dh)
+021D:0E37  07					pop	es
+021D:0E38  1F					pop	ds
+021D:0E39  5F					pop	di
+021D:0E3A  5E					pop	si
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 18
+
+021D:0E3B  59					pop	cx
+021D:0E3C  CB					retf				; Return far
+021D:0E3D  6E					db	6Eh
+021D:0E3E  FB					sti				; Enable interrupts
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_11		proc	near
+021D:0E3F  FF 36 014D				push	word ptr ds:[14Dh]	; (021D:014D=5582h)
+021D:0E43  57					push	di
+021D:0E44  CB					retf				; Return far
+				sub_11		endp
+
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_12		proc	near
+021D:0E45  06					push	es
+021D:0E46  E8 0071				call	sub_13			; (0EBA)
+021D:0E49  80 3E 002C 00			cmp	byte ptr ds:[2Ch],0	; (021D:002C=39h)
+021D:0E4E  74 02				je	loc_83			; Jump if equal
+021D:0E50  07					pop	es
+021D:0E51  C3					retn
+021D:0E52			loc_83:
+021D:0E52  B8 020D				mov	ax,20Dh
+021D:0E55  C4					db	0C4h
+021D:0E56  C4 52 09				les	dx,dword ptr [bp+si+9]	; Load 32 bit ptr
+021D:0E59  C4 36 001A				les	si,dword ptr ds:[1Ah]	; (021D:001A=0AE9Ch) Load 32 bit ptr
+021D:0E5D  26: 87 04				xchg	es:[si],ax
+021D:0E60  A3 001E				mov	word ptr ds:[1Eh],ax	; (021D:001E=961Fh)
+021D:0E63  8C C8				mov	ax,cs
+021D:0E65  26: 87 44 02				xchg	es:[si+2],ax
+021D:0E69  A3 0020				mov	word ptr data_7+2,ax	; (021D:0020=0A3B9h)
+021D:0E6C  8B C1				mov	ax,cx
+021D:0E6E  3D 3C00				cmp	ax,3C00h
+021D:0E71  72 03				jb	loc_84			; Jump if below
+021D:0E73  B8 3C00				mov	ax,3C00h
+021D:0E76			loc_84:
+021D:0E76  2B 06 0037				sub	ax,word ptr ds:[37h]	; (021D:0037=0)
+021D:0E7A  3D 0040				cmp	ax,40h
+021D:0E7D  72 0C				jb	loc_85			; Jump if below
+021D:0E7F  83 3E 0035 00			cmp	word ptr ds:[35h],0	; (021D:0035=80Fh)
+021D:0E84  75 05				jne	loc_85			; Jump if not equal
+021D:0E86  C6 06 0029 01			mov	byte ptr ds:[29h],1	; (021D:0029=14h)
+021D:0E8B			loc_85:
+021D:0E8B  0B C0				or	ax,ax			; Zero ?
+021D:0E8D  74 20				jz	loc_88			; Jump if zero
+021D:0E8F  B9 0400				mov	cx,400h
+021D:0E92  33 DB				xor	bx,bx			; Zero register
+021D:0E94  80 3E 0029 00			cmp	byte ptr ds:[29h],0	; (021D:0029=14h)
+021D:0E99  74 03				je	loc_86			; Jump if equal
+021D:0E9B  BB 0040				mov	bx,40h
+021D:0E9E			loc_86:
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 19
+
+021D:0E9E  3B 1E 0035				cmp	bx,word ptr ds:[35h]	; (021D:0035=80Fh)
+021D:0EA2  73 04				jae	loc_87			; Jump if above or =
+021D:0EA4  8B 1E 0035				mov	bx,word ptr ds:[35h]	; (021D:0035=80Fh)
+021D:0EA8			loc_87:
+021D:0EA8  03 CB				add	cx,bx
+021D:0EAA  2B C3				sub	ax,bx
+021D:0EAC  E8 01E2				call	$+1E5h
+021D:0EAF			loc_88:
+021D:0EAF  07					pop	es
+021D:0EB0  C3					retn
+				sub_12		endp
+
+							                        ;* No entry point to code
+021D:0EB1  13 00				adc	ax,[bx+si]
+021D:0EB3  FF					db	0FFh
+021D:0EB4  FF 56 44				call	word ptr [bp+44h]	;*
+021D:0EB7  49					dec	cx
+021D:0EB8  53					push	bx
+021D:0EB9  4B					dec	bx
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_13		proc	near
+021D:0EBA  06					push	es
+021D:0EBB  33 C0				xor	ax,ax			; Zero register
+021D:0EBD  8E C0				mov	es,ax
+021D:0EBF  26: 8E 06 0066			mov	es,word ptr es:[66h]	; (0000:0066=21Dh)
+021D:0EC4  BF 0012				mov	di,12h
+021D:0EC7  BE 01C5				mov	si,1C5h
+021D:0ECA  B9 0005				mov	cx,5
+021D:0ECD  FC					cld				; Clear direction
+021D:0ECE  F3/ A6				repe	cmpsb			; Rep zf=1+cx >0 Cmp [si] to es:[di]
+021D:0ED0  07					pop	es
+021D:0ED1  74 24				jz	loc_89			; Jump if zero
+021D:0ED3  E8 0110				call	sub_14			; (0FE6)
+021D:0ED6  06					push	es
+021D:0ED7  2E: C4 3E 01C1			les	di,dword ptr cs:[1C1h]	; (021D:01C1=0) Load 32 bit ptr
+021D:0EDC  BE 01C5				mov	si,1C5h
+021D:0EDF  B9 0005				mov	cx,5
+021D:0EE2  FC					cld				; Clear direction
+021D:0EE3  F3/ A6				repe	cmpsb			; Rep zf=1+cx >0 Cmp [si] to es:[di]
+021D:0EE5  07					pop	es
+021D:0EE6  9C					pushf				; Push flags
+021D:0EE7  E8 0136				call	$+139h
+021D:0EEA  0E					push	cs
+021D:0EEB  FF 16 0014				call	word ptr ds:[14h]	; (021D:0014=0E0Dh)
+021D:0EEF  74 06				jz	loc_89			; Jump if zero
+021D:0EF1  C6 06 002C 00			mov	byte ptr ds:[2Ch],0	; (021D:002C=39h)
+021D:0EF6  C3					retn
+021D:0EF7			loc_89:
+021D:0EF7  C6 06 002C 01			mov	byte ptr ds:[2Ch],1	; (021D:002C=39h)
+021D:0EFC  C3					retn
+				sub_13		endp
+
+							                        ;* No entry point to code
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 20
+
+021D:0EFD  80 FC 88				cmp	ah,88h
+021D:0F00  74 0A				je	loc_90			; Jump if equal
+021D:0F02  80 FC 87				cmp	ah,87h
+021D:0F05  74 0C				je	loc_91			; Jump if equal
+021D:0F07  2E: FF 2E 001E			jmp	dword ptr cs:[1Eh]	; (021D:001E=961Fh)
+021D:0F0C			loc_90:
+021D:0F0C  2E: A1 0035				mov	ax,word ptr cs:[35h]	; (021D:0035=80Fh)
+021D:0F10  E9 0249				jmp	$+24Ch
+021D:0F13			loc_91:
+021D:0F13  E8 01FE				call	$+201h
+021D:0F16  83 EC 04				sub	sp,4
+021D:0F19  60					db	60h
+021D:0F1A  E8 016C				call	$+16Fh
+021D:0F1D  8B EC				mov	bp,sp
+021D:0F1F  89 46 12				mov	[bp+12h],ax
+021D:0F22  8B 46 18				mov	ax,[bp+18h]
+021D:0F25  89 46 10				mov	[bp+10h],ax
+021D:0F28  61					db	61h
+021D:0F29  2E: FF 1E 001E			call	dword ptr cs:[1Eh]	; (021D:001E=961Fh)
+021D:0F2E  50					push	ax
+021D:0F2F  9C					pushf				; Push flags
+021D:0F30  55					push	bp
+021D:0F31  8B EC				mov	bp,sp
+021D:0F33  8B 46 02				mov	ax,[bp+2]
+021D:0F36  89 46 0C				mov	[bp+0Ch],ax
+021D:0F39  83 7E 06 00				cmp	word ptr [bp+6],0
+021D:0F3D  5D					pop	bp
+021D:0F3E  58					pop	ax
+021D:0F3F  58					pop	ax
+021D:0F40  74 0B				jz	loc_92			; Jump if zero
+021D:0F42  E8 01CF				call	$+1D2h
+021D:0F45  60					db	60h
+021D:0F46  B8 0001				mov	ax,1
+021D:0F49  E8 0272				call	$+275h
+021D:0F4C  61					db	61h
+021D:0F4D			loc_92:
+021D:0F4D  83 C4 02				add	sp,2
+021D:0F50  E9 0209				jmp	$+20Ch
+							                        ;* No entry point to code
+021D:0F53  00 00				add	[bx+si],al
+021D:0F55  E8 01BC				call	$+1BFh
+021D:0F58  B3 91				mov	bl,91h
+021D:0F5A  3C 40				cmp	al,40h			; '@'
+021D:0F5C  75 06				jne	loc_93			; Jump if not equal
+021D:0F5E  3B 16 0263				cmp	dx,word ptr ds:[263h]	; (021D:0263=0)
+021D:0F62  74 21				je	loc_94			; Jump if equal
+021D:0F64			loc_93:
+021D:0F64  80 3E 0026 01			cmp	byte ptr ds:[26h],1	; (021D:0026=3)
+021D:0F69  74 1A				je	loc_94			; Jump if equal
+021D:0F6B  B3 90				mov	bl,90h
+021D:0F6D  80 3E 0029 00			cmp	byte ptr ds:[29h],0	; (021D:0029=14h)
+021D:0F72  74 11				je	loc_94			; Jump if equal
+021D:0F74  B3 92				mov	bl,92h
+021D:0F76  3B 16 0033				cmp	dx,word ptr ds:[33h]	; (021D:0033=0Ch)
+021D:0F7A  72 09				jb	loc_94			; Jump if below
+021D:0F7C  B8 0001				mov	ax,1
+021D:0F7F  A2 0026				mov	byte ptr ds:[26h],al	; (021D:0026=3)
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 21
+
+021D:0F82  32 DB				xor	bl,bl			; Zero register
+021D:0F84  C3					retn
+021D:0F85			loc_94:
+021D:0F85  33 C0				xor	ax,ax			; Zero register
+021D:0F87  C3					retn
+							                        ;* No entry point to code
+021D:0F88  E8 0189				call	$+18Ch
+021D:0F8B  A0 0026				mov	al,byte ptr ds:[26h]	; (021D:0026=3)
+021D:0F8E  0A C0				or	al,al			; Zero ?
+021D:0F90  74 0B				jz	loc_95			; Jump if zero
+021D:0F92  C6 06 0026 00			mov	byte ptr ds:[26h],0	; (021D:0026=3)
+021D:0F97  B8 0001				mov	ax,1
+021D:0F9A  32 DB				xor	bl,bl			; Zero register
+021D:0F9C  C3					retn
+021D:0F9D			loc_95:
+021D:0F9D  33 C0				xor	ax,ax			; Zero register
+021D:0F9F  B3 93				mov	bl,93h
+021D:0FA1  C3					retn
+							                        ;* No entry point to code
+021D:0FA2  E8 016F				call	$+172h
+021D:0FA5  83 3E 0031 01			cmp	word ptr ds:[31h],1	; (021D:0031=3F3Eh)
+021D:0FAA  74 0D				je	loc_96			; Jump if equal
+021D:0FAC  E8 0037				call	sub_14			; (0FE6)
+021D:0FAF  0B C0				or	ax,ax			; Zero ?
+021D:0FB1  74 0C				jz	loc_97			; Jump if zero
+021D:0FB3  C7 06 0031 0001			mov	word ptr ds:[31h],1	; (021D:0031=3F3Eh)
+021D:0FB9			loc_96:
+021D:0FB9  B8 0001				mov	ax,1
+021D:0FBC  32 DB				xor	bl,bl			; Zero register
+021D:0FBE  C3					retn
+021D:0FBF			loc_97:
+021D:0FBF  B3 82				mov	bl,82h
+021D:0FC1  33 C0				xor	ax,ax			; Zero register
+021D:0FC3  C3					retn
+							                        ;* No entry point to code
+021D:0FC4  E8 014D				call	$+150h
+021D:0FC7  83 3E 0031 00			cmp	word ptr ds:[31h],0	; (021D:0031=3F3Eh)
+021D:0FCC  74 0D				je	loc_98			; Jump if equal
+021D:0FCE  E8 004F				call	$+52h
+021D:0FD1  0B C0				or	ax,ax			; Zero ?
+021D:0FD3  74 0C				jz	loc_99			; Jump if zero
+021D:0FD5  C7 06 0031 0000			mov	word ptr ds:[31h],0	; (021D:0031=3F3Eh)
+021D:0FDB			loc_98:
+021D:0FDB  B8 0001				mov	ax,1
+021D:0FDE  32 DB				xor	bl,bl			; Zero register
+021D:0FE0  C3					retn
+021D:0FE1			loc_99:
+021D:0FE1  B3 82				mov	bl,82h
+021D:0FE3  33 C0				xor	ax,ax			; Zero register
+021D:0FE5  C3					retn
+
+				;ﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂﬂ
+				;                              SUBROUTINE
+				;‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹‹
+
+				sub_14		proc	near
+021D:0FE6  E8 012B				call	$+12Eh
+						Sourcer	v5.10   14-Sep-19   3:13 pm   Page 22
+
+021D:0FE9  80 3E 0027 01			cmp	byte ptr ds:[27h],1	; (021D:0027=4)
+021D:0FEE  75 25				jne	$+27h			; Jump if not equal
+021D:0FF0  C6 06 003B 03			mov	byte ptr ds:[3Bh],3	; (021D:003B=0)
+021D:0FF5  83 3E 002F 00			cmp	word ptr ds:[2Fh],0	; (021D:002F=3D3Ch)
+021D:0FFA  74 07		;*		je	loc_100			;*Jump if equal
+021D:0FFA  74 07				db	 74h, 07h
+021D:0FFC  E8 008A				call	$+8Dh
+021D:0FFF  0B C0				or	ax,ax			; Zero ?
+
