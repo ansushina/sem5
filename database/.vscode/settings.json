@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "MusicLabelsDB",
+            "dialect": "MSSQL",
+            "name": "nastya",
+            "password": "Namtaehyun99",
+            "port": 1433,
+            "server": "localhost",
+            "username": "SA"
+        }
+    ]
+}

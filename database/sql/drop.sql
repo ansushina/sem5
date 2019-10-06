@@ -1,0 +1,2 @@
+drop DATABASE MusicLabelsDB;
+go
