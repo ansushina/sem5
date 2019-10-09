@@ -10,8 +10,12 @@ using namespace std;
 int main()
 {
     setlocale(LC_ALL,"Russian");
+    cout << "Хотите запустить тесты? y/n"<< endl;
+    char str;
+    cin >> str;
 
-    test();
+    if (str == 'y')
+        test();
     Livinshtein finder;
     DamerauLiv finder2;
     DamerauLivRec finder3;
