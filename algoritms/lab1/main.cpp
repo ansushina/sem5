@@ -1,15 +1,9 @@
 #include <iostream>
 #include <stdio.h>
+#include "tests.h"
 
 #include "finddistance.h"
 
-unsigned long long tick(void)
-{
-    unsigned long long d;
-    __asm__ __volatile__ ("rdtsc" : "=A" (d) );
-
-    return d;
-}
 
 using namespace std;
 
@@ -17,6 +11,7 @@ int main()
 {
     setlocale(LC_ALL,"Russian");
 
+    test();
     Livinshtein finder;
     DamerauLiv finder2;
     DamerauLivRec finder3;
