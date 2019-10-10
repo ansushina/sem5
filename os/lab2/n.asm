@@ -19,20 +19,33 @@ gdt_screen descr <4095,8000h,0Bh,92h> ;Селектор 32, видеобуфер
 gdt_size=$-gdt_null
 
 pdescr dq 0 ;Псевдодескриnтор 
-sym    db 1
 attr   db 1Eh
-mes    db 27,'[0; Real mode!',27,'[O$' 
-s      db ?
-attr2  db 1Eh
+mes1   db 27,'Real mode' 
+mes2   db 27,'Protected mode'
 data_size=$-gdt_null 
 data ends 
 
 text segment 'code' use16  
 assume CS:text,DS:data 
-main proc 
+main proc
 	xor EAX, EAX 
 	mov AX, data 
-	mov DS, AX 
+	mov DS, AX
+	
+	mov AX, 0B800h
+	mov ES, AX
+	mov EBX, offset mes1
+	mov AH, attr
+	mov DI, 0
+	mov CX, 10
+screen1:
+	mov AL, byte ptr [EBX]
+	stosw
+	inc BX
+	loop screen1
+ 
+ 
+	mov AX, DS
 	;Вычислим 32-битовый лин адрес сегмента данных и загрузим его
 	;в дескриптор сегмента данных GDT. 
 	shl EAX, 4
@@ -84,15 +97,16 @@ continue:
 	
 	mov AX, 32 ;Селектор сеrмента видеобуфера 
 	mov ES, AX 
-	mov BX, 800 
-	mov CX, 64
-	mov AX, word ptr sym
+	mov DI, 160 
+	mov CX, 15
+	mov AH, attr
+	mov EBX, offset mes2
 	
-screen:
-	mov ES:[BX], AX
-	add BX, 2
-	inc AX
-	loop screen
+screen2:
+	mov AL, byte ptr [EBX]
+	stosw
+	inc BX
+	loop screen2
 	
 	;Определим объём доступной физ. памяти
 mem:
@@ -110,18 +124,16 @@ check_mem:
 	loop check_mem
 	
 end_mem:
-	xor EDX, EDX
 	mov EAX, EBX
-	mov BX, 972
+	mov BX, 340
 	mov ECX, 10
 divide:	
+	xor EDX, EDX
 	div ECX
 	add EDX, '0'
-	mov s, DL
-	mov DX, word ptr s
+	mov DH, attr
 	mov ES:[BX], DX
 	sub BX, 2
-	mov EDX, 0
 	cmp EAX, 0
 	jnz divide
 	
@@ -164,9 +176,16 @@ return:
 	mov AL, 0 
 	out 70h, AL  
 	
-	mov AH, 09h 
-	mov EDX, offset mes
-	int 21h 
+	mov EBX, offset mes1
+	mov AH, attr
+	mov DI, 640
+	mov CX, 10
+screen3:
+	mov AL, byte ptr [BX]
+	stosw
+	inc BX
+	loop screen3
+
 	mov AX, 4C00h
 	int 21h 
 main endp 
