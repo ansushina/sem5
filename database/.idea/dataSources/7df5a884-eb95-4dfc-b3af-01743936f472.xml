@@ -28,7 +28,7 @@
       <ObjectId>13057</ObjectId>
       <Comment>default administrative connection database</Comment>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>643</IntrospectionStateNumber>
+      <IntrospectionStateNumber>866</IntrospectionStateNumber>
       <Current>1</Current>
     </database>
     <role id="8" parent="1" name="nastya">
@@ -107,7 +107,7 @@
       <Comment>standard public schema</Comment>
       <StateNumber>351</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>644</IntrospectionStateNumber>
+      <IntrospectionStateNumber>867</IntrospectionStateNumber>
       <Current>1</Current>
     </schema>
     <access-method id="20" parent="7" name="btree">
@@ -166,5 +166,166 @@
       <SchemaName>pg_catalog</SchemaName>
       <SchemaId>11</SchemaId>
     </extension>
+    <table id="27" parent="19" name="friend">
+      <ObjectId>40999</ObjectId>
+      <Owner>nastya</Owner>
+      <StateNumber>865</StateNumber>
+    </table>
+    <table id="28" parent="19" name="highschooler">
+      <ObjectId>40996</ObjectId>
+      <Owner>nastya</Owner>
+      <StateNumber>855</StateNumber>
+    </table>
+    <table id="29" parent="19" name="movie">
+      <ObjectId>40961</ObjectId>
+      <Owner>nastya</Owner>
+      <StateNumber>829</StateNumber>
+    </table>
+    <table id="30" parent="19" name="rating">
+      <ObjectId>40977</ObjectId>
+      <Owner>nastya</Owner>
+      <StateNumber>829</StateNumber>
+    </table>
+    <table id="31" parent="19" name="reviewer">
+      <ObjectId>40969</ObjectId>
+      <Owner>nastya</Owner>
+      <StateNumber>829</StateNumber>
+    </table>
+    <column id="32" parent="27" name="id1">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+      <StateNumber>865</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="33" parent="27" name="id2">
+      <Position>2</Position>
+      <DataType>integer|0s</DataType>
+      <StateNumber>865</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="34" parent="28" name="id">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+      <StateNumber>855</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="35" parent="28" name="name">
+      <Position>2</Position>
+      <DataType>varchar(10)|0s</DataType>
+      <StateNumber>855</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="36" parent="29" name="mid">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>827</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="37" parent="29" name="title">
+      <Position>2</Position>
+      <DataType>text|0s</DataType>
+      <StateNumber>827</StateNumber>
+      <TypeId>25</TypeId>
+    </column>
+    <column id="38" parent="29" name="year">
+      <Position>3</Position>
+      <DataType>integer|0s</DataType>
+      <StateNumber>827</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="39" parent="29" name="director">
+      <Position>4</Position>
+      <DataType>text|0s</DataType>
+      <StateNumber>827</StateNumber>
+      <TypeId>25</TypeId>
+    </column>
+    <index id="40" parent="29" name="movie_pkey">
+      <ObjectId>40967</ObjectId>
+      <StateNumber>827</StateNumber>
+      <ColNames>mid</ColNames>
+      <Unique>1</Unique>
+      <Primary>1</Primary>
+    </index>
+    <key id="41" parent="29" name="movie_pkey">
+      <ObjectId>40968</ObjectId>
+      <StateNumber>827</StateNumber>
+      <ColNames>mid</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>movie_pkey</UnderlyingIndexName>
+    </key>
+    <column id="42" parent="30" name="rid">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>829</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="43" parent="30" name="mid">
+      <Position>2</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>829</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="44" parent="30" name="stars">
+      <Position>3</Position>
+      <DataType>integer|0s</DataType>
+      <StateNumber>829</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="45" parent="30" name="ratingdate">
+      <Position>4</Position>
+      <DataType>date|0s</DataType>
+      <StateNumber>829</StateNumber>
+      <TypeId>1082</TypeId>
+    </column>
+    <foreign-key id="46" parent="30" name="rating_rid_fkey">
+      <ObjectId>40980</ObjectId>
+      <StateNumber>829</StateNumber>
+      <ColNames>rid</ColNames>
+      <RefTableId>40969</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>reviewer</RefTableName>
+      <RefKeyName>reviewer_pkey</RefKeyName>
+      <RefColNames>rid</RefColNames>
+    </foreign-key>
+    <foreign-key id="47" parent="30" name="rating_mid_fkey">
+      <ObjectId>40985</ObjectId>
+      <StateNumber>829</StateNumber>
+      <ColNames>mid</ColNames>
+      <RefTableId>40961</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>movie</RefTableName>
+      <RefKeyName>movie_pkey</RefKeyName>
+      <RefColNames>mid</RefColNames>
+    </foreign-key>
+    <column id="48" parent="31" name="rid">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>828</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="49" parent="31" name="name">
+      <Position>2</Position>
+      <DataType>text|0s</DataType>
+      <StateNumber>828</StateNumber>
+      <TypeId>25</TypeId>
+    </column>
+    <index id="50" parent="31" name="reviewer_pkey">
+      <ObjectId>40975</ObjectId>
+      <StateNumber>828</StateNumber>
+      <ColNames>rid</ColNames>
+      <Unique>1</Unique>
+      <Primary>1</Primary>
+    </index>
+    <key id="51" parent="31" name="reviewer_pkey">
+      <ObjectId>40976</ObjectId>
+      <StateNumber>828</StateNumber>
+      <ColNames>rid</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>reviewer_pkey</UnderlyingIndexName>
+    </key>
   </database-model>
 </dataSource>

@@ -78,9 +78,12 @@ public:
                 int step = s1[i-1] == s2[j-1] ? 0 : 1;
                 matrix[i][j] = std::min(std::min(matrix[i-1][j]+1, matrix[i][j-1]+1),
                         matrix[i-1][j-1]+step);
-                if (s1[i-1] == s2[j-2] && s1[i-2] == s2[j-1]) {
-                    matrix[i][j] = std::min(matrix[i][j], matrix[i-2][j-2]+1);
+                if (i > 1 && j > 1){
+                    if (s1[i-1] == s2[j-2] && s1[i-2] == s2[j-1]) {
+                        matrix[i][j] = std::min(matrix[i][j], matrix[i-2][j-2]+1);
+                    }
                 }
+
             }
         }
 
@@ -135,9 +138,11 @@ public:
         int third = this->count(s1.substr(0, len1-1), s2.substr(0,len2-1)) + step;
 
         int returnal = std::min(std::min(first, second), third);
-        if (s1[len1-1] == s2[len2-2] && s1[len1-2] == s2[len2-1]) {
-            int fourth = this->count(s1.substr(0, len1-2), s2.substr(0, len2-2)) + 1;
-            return std::min(returnal, fourth);
+        if (len1 > 1 && len2 > 1){
+            if (s1[len1-1] == s2[len2-2] && s1[len1-2] == s2[len2-1]) {
+                int fourth = this->count(s1.substr(0, len1-2), s2.substr(0, len2-2)) + 1;
+                return std::min(returnal, fourth);
+            }
         }
 
         return returnal;

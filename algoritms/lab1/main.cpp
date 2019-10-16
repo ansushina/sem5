@@ -27,14 +27,14 @@ int main()
     cout << "Ливинштейна "<< endl;
     int a = finder.count(s1,s2,1);
     cout << "Ответ: " << (a) << std::endl << std::endl;
-    cout << "Домерау-ливинштейна "<< endl;
+    cout << "Домерау-Ливинштейна "<< endl;
     a = finder2.count(s1,s2,1);
     cout << "Ответ: " << (a) << std::endl << std::endl;
-    cout << "Домерау-Ливинштейна рукурсивно "<<endl;
+    cout << "Домерау-Ливинштейна рекурсивно "<<endl;
     a = finder3.count(s1,s2);
     cout << "Ответ: " << (a) << std::endl << std::endl;
 
-    cout << "Измерим время работы алгоритмов в тиках" << std::endl;
+    /*cout << "Измерим время работы алгоритмов в тиках" << std::endl;
 
     unsigned int time = 0;
     for (int i = 0; i < 100 ; i++)
@@ -67,7 +67,7 @@ int main()
         time += tick2-tick1;
     }
 
-    cout << "Домерау-Ливинштейна рекурсивно(в тиках) " << time/100 << endl;
+    cout << "Домерау-Ливинштейна рекурсивно(в тиках) " << time/100 << endl;*/
 
     return 0;
 }

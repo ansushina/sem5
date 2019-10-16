@@ -38,7 +38,7 @@ void test() {
     std::cout << "Тестирование по времени..."<< std::endl;
     printf("%2s %15s %15s %15s\n", "N" , "Livinshtein", "DamerauLiv", "RecDamerauLiv");
     unsigned int time = 0;
-    for (int j = 1; j < 10; j++) {
+    for (int j = 1; j < 11; j++) {
         char s1[j], s2[j];
         printf("%2d", j);
         time = 0;
