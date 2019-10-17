@@ -14,8 +14,10 @@ int main()
     char str;
     cin >> str;
 
-    if (str == 'y')
+    if (str == 'y'){
         test();
+        return 0;
+    }
     Livinshtein finder;
     DamerauLiv finder2;
     DamerauLivRec finder3;
