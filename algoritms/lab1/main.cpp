@@ -10,7 +10,7 @@ using namespace std;
 int main()
 {
     setlocale(LC_ALL,"Russian");
-    cout << "Хотите запустить тесты? y/n"<< endl;
+    cout << "Do you want to run tests? y/n"<< endl;
     char str;
     cin >> str;
 
@@ -26,15 +26,15 @@ int main()
     cin >> s1;
     cout << "Input str2:";
     cin >> s2;
-    cout << "Ливинштейна "<< endl;
+    cout << "Leveshtein "<< endl;
     int a = finder.count(s1,s2,1);
-    cout << "Ответ: " << (a) << std::endl << std::endl;
-    cout << "Домерау-Ливинштейна "<< endl;
+    cout << "answer: " << (a) << std::endl << std::endl;
+    cout << "Damerau Levenshtein "<< endl;
     a = finder2.count(s1,s2,1);
-    cout << "Ответ: " << (a) << std::endl << std::endl;
-    cout << "Домерау-Ливинштейна рекурсивно "<<endl;
+    cout << "answer: " << (a) << std::endl << std::endl;
+    cout << "Damerau Levenshtein Rec "<<endl;
     a = finder3.count(s1,s2);
-    cout << "Ответ: " << (a) << std::endl << std::endl;
+    cout << "answer: " << (a) << std::endl << std::endl;
 
     /*cout << "Измерим время работы алгоритмов в тиках" << std::endl;
 
