@@ -8,12 +8,6 @@
 
 typedef int ** matrix_t;
 
-/*struct Matrix {
-    matrix_t matr;
-    int cols;
-    int rows;
-};*/
-
 class Matrix {
 public:
     Matrix(int n, int m): matrix(n) {
@@ -26,8 +20,6 @@ public:
              }
         }
     }
-
-
 
     void addRow(int *row, int n) {
         std::vector<int> new_line;
@@ -63,16 +55,6 @@ public:
 private:
     std::vector<std::vector<int>> matrix;
 };
-/*
-int create_matrix(Matrix &c, size_t n, size_t m) {
-    c.rows = n;
-    c.cols = m;
-    int rc = allocate_matrix(c.matr, n, m);
-    if (rc)
-        return 1;
-}*/
-void free_matrix(matrix_t mat, size_t n);
-int allocate_matrix(matrix_t &matrix, size_t n, size_t m);
 
 
 #endif // MATRIX_H

@@ -4,8 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    alg.cpp \
-    matrix.cpp
+    alg.cpp
 
 HEADERS += \
     alg.h \
