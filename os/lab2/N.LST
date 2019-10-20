@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 5.10                  10/10/19 10:18:4
+Microsoft (R) Macro Assembler Version 5.10                  10/10/19 11:25:1
                                                              Page     1-1
 
 
@@ -33,7 +33,7 @@
       25 000E  00			
       26 000F  00			
       27				
-      28 0010  8601			gdt_code descr <code_size-1,,,98h> ;С�
+      28 0010  3B01			gdt_code descr <code_size-1,,,98h> ;С�
 					�лектор 16, сегмент ком
 					анд 
       29 0012  0000			
@@ -56,7 +56,7 @@
       43 0022  0080			
       44 0024  0B			
       45 0025  92			
-Microsoft (R) Macro Assembler Version 5.10                  10/10/19 10:18:4
+Microsoft (R) Macro Assembler Version 5.10                  10/10/19 11:25:1
                                                              Page     1-2
 
 
@@ -87,7 +87,7 @@
       69 000B  8E C0				mov ES, AX
       70 000D  66| BB 0031 R			mov EBX, offset mes1
       71 0013  67| 8A 25 00000030 R		mov AH, attr
-      72 001A  BF 0000				mov DI, 0
+      72 001A  BF 00A0				mov DI, 160
       73 001D  B9 000A				mov CX, 10
       74 0020				screen1:
       75 0020  67| 8A 03			mov AL, byte ptr [EBX]
@@ -114,7 +114,7 @@
 					�нтов команд и стека
       91 0040  66| 33 C0			xor EAX, EAX 
       92 0043  8C C8				mov AX, CS
-Microsoft (R) Macro Assembler Version 5.10                  10/10/19 10:18:4
+Microsoft (R) Macro Assembler Version 5.10                  10/10/19 11:25:1
                                                              Page     1-3
 
 
@@ -171,9 +171,9 @@ n.asm(76): warning A4057: Illegal size for operand
      134 00A9  B8 0020				mov AX, 32 ;Селектор с
 					еrмента видеобуфера 
      135 00AC  8E C0				mov ES, AX 
-     136 00AE  BF 00A0				mov DI, 160 
+     136 00AE  BF 0140				mov DI, 320 
      137 00B1  B9 000F				mov CX, 15
-Microsoft (R) Macro Assembler Version 5.10                  10/10/19 10:18:4
+Microsoft (R) Macro Assembler Version 5.10                  10/10/19 11:25:1
                                                              Page     1-4
 
 
@@ -189,125 +189,93 @@ n.asm(76): warning A4057: Illegal size for operand
      147					;Определим объём 
 					доступной физ. памяти
      148 00C8				mem:
-     149 00C8  66| BB 00100001			mov EBX, 100001h
-     150 00CE  B2 49				mov DL, 49h ;рандомное
-					 значение
-     151 00D0  66| B9 FFEFFFFE			mov ECX, 0ffeffffeh
-     152				
-     153 00D6				check_mem:
-     154 00D6  67| 8A 33			mov DH, DS:[EBX]
-     155 00D9  67| 88 13			mov DS:[EBX], DL ; запись
-					 сигнатуры
-     156 00DC  67| 38 13			cmp DS:[EBX], DL ; сравне
-					ние сигнатуры
-     157 00DF  0F 85 00EA R			jne end_mem
-     158 00E3  67| 88 33			mov DS:[EBX], DH
-     159 00E6  66| 43				inc EBX
-     160 00E8  E2 EC				loop check_mem
-     161					
-     162 00EA				end_mem:
-     163 00EA  66| 8B C3			mov EAX, EBX
-     164 00ED  BB 0154				mov BX, 340
-     165 00F0  66| B9 0000000A			mov ECX, 10
-     166 00F6				divide:	
-     167 00F6  66| 33 D2			xor EDX, EDX
-     168 00F9  66| F7 F1			div ECX
-     169 00FC  66| 83 C2 30			add EDX, '0'
-     170 0100  67| 8A 35 00000030 R		mov DH, attr
-     171 0107  26: 89 17			mov ES:[BX], DX
-     172 010A  83 EB 02				sub BX, 2
-     173 010D  66| 83 F8 00			cmp EAX, 0
-     174 0111  75 E3				jnz divide
-     175					
-     176					
-     177					;Подrотовим перех
+     149				
+     150					
+     151					
+     152					;Подrотовим перех
 					од в реальный режим 
-     178					;Сформируем и заг
+     153					;Сформируем и заг
 					рузим дескрипторы дл�
 					� реапьноrо режима 
-     179 0113  67| C7 05 00000008 R		mov gdt_data.limit, 0FFFFh
-     180       FFFF			
-     181 011C  67| C7 05 00000010 R		mov gdt_code.limit, 0FFFFh
-     182       FFFF			
-     183 0125  67| C7 05 00000018 R		mov gdt_stack.limit, 0FFFFh
-     184       FFFF			
-Microsoft (R) Macro Assembler Version 5.10                  10/10/19 10:18:4
+     154 00C8  67| C7 05 00000008 R		mov gdt_data.limit, 0FFFFh
+     155       FFFF			
+     156 00D1  67| C7 05 00000010 R		mov gdt_code.limit, 0FFFFh
+     157       FFFF			
+     158 00DA  67| C7 05 00000018 R		mov gdt_stack.limit, 0FFFFh
+     159       FFFF			
+     160 00E3  67| C7 05 00000020 R		mov gdt_screen.limit, 0FFFFh
+     161       FFFF			
+     162					
+     163 00EC  B8 0008				mov AX, 8 ;Загрузим т�
+					�невой регистр 
+     164 00EF  8E D8				mov DS, AX ;сегмента д
+					анных 
+     165 00F1  B8 0018				mov AX, 24 ;Заrрузим т�
+					�невой регистр 
+     166 00F4  8E D0				mov SS, AX ;стека 
+     167 00F6  B8 0020				mov AX, 32 ;Загрузим т
+					еневой регистр 
+     168 00F9  8E C0				mov ES, AX ;дополните�
+					�ьноrо сегмента 
+     169				
+     170 00FB  EA				db 0EAh
+     171 00FC  0100 R				dw offset go
+     172 00FE  0010				dw 16 
+     173					
+     174					;Переход в реальн
+					ый режим
+     175 0100				go: 
+     176 0100  0F 20 C0				mov EAX, CR0 
+     177 0103  66| 83 E0 FE			and EAX, 0FFFFFFFEh ;Сброс
+					им бит PЕ
+     178 0107  0F 22 C0				mov CR0, EAX 
+     179 010A  EA				db 0EAh 
+     180 010B  010F R				dw offset return
+Microsoft (R) Macro Assembler Version 5.10                  10/10/19 11:25:1
                                                              Page     1-5
 
 
-     185 012E  67| C7 05 00000020 R		mov gdt_screen.limit, 0FFFFh
-     186       FFFF			
-     187					
-     188 0137  B8 0008				mov AX, 8 ;Загрузим т�
-					�невой регистр 
-     189 013A  8E D8				mov DS, AX ;сегмента д
-					анных 
-     190 013C  B8 0018				mov AX, 24 ;Заrрузим т�
-					�невой регистр 
-     191 013F  8E D0				mov SS, AX ;стека 
-     192 0141  B8 0020				mov AX, 32 ;Загрузим т
-					еневой регистр 
-     193 0144  8E C0				mov ES, AX ;дополните�
-					�ьноrо сегмента 
-     194				
-     195 0146  EA				db 0EAh
-     196 0147  014B R				dw offset go
-     197 0149  0010				dw 16 
-     198					
-     199					;Переход в реальн
-					ый режим
-     200 014B				go: 
-     201 014B  0F 20 C0				mov EAX, CR0 
-     202 014E  66| 83 E0 FE			and EAX, 0FFFFFFFEh ;Сброс
-					им бит PЕ
-     203 0152  0F 22 C0				mov CR0, EAX 
-     204 0155  EA				db 0EAh 
-     205 0156  015A R				dw offset return
-     206 0158  ---- R				dw text 
-     207					
-     208					; Восстановим опе
+     181 010D  ---- R				dw text 
+     182					
+     183					; Восстановим опе
 					рационную среду реал�
 					�ного режима
-     209 015A				return: 
-     210 015A  B8 ---- R			mov AX, data
-     211 015D  8E D8				mov DS, AX
-     212 015F  B8 ---- R			mov AX, stk
-     213 0162  8E D0				mov SS, AX 
-     214				
-     215 0164  FB				sti
-     216 0165  B0 00				mov AL, 0 
-     217 0167  E6 70				out 70h, AL  
-     218					
-     219 0169  66| BB 0031 R			mov EBX, offset mes1
-     220 016F  67| 8A 25 00000030 R		mov AH, attr
-     221 0176  BF 0280				mov DI, 640
-     222 0179  B9 000A				mov CX, 10
-     223 017C				screen3:
-     224 017C  8A 07				mov AL, byte ptr [BX]
-     225 017E  AB				stosw
-     226 017F  43				inc BX
-     227 0180  E2 FA				loop screen3
-     228				
-     229 0182  B8 4C00				mov AX, 4C00h
-Microsoft (R) Macro Assembler Version 5.10                  10/10/19 10:18:4
-                                                             Page     1-6
-
-
-     230 0185  CD 21				int 21h 
-     231 0187				main endp 
-     232				
-     233 = 0187				code_size=$-main 
-     234 0187				text ends
-     235				
-     236 0000				stk segment stack 'stack'
-     237 0000  0100[				db 256 dup ('^')
-     238	   5E			
-     239			 ]	
-     240				
-     241 0100				stk ends 
-     242				
-     243				end main 
-Microsoft (R) Macro Assembler Version 5.10                  10/10/19 10:18:4
+     184 010F				return: 
+     185 010F  B8 ---- R			mov AX, data
+     186 0112  8E D8				mov DS, AX
+     187 0114  B8 ---- R			mov AX, stk
+     188 0117  8E D0				mov SS, AX 
+     189				
+     190 0119  FB				sti
+     191 011A  B0 00				mov AL, 0 
+     192 011C  E6 70				out 70h, AL  
+     193					
+     194 011E  66| BB 0031 R			mov EBX, offset mes1
+     195 0124  67| 8A 25 00000030 R		mov AH, attr
+     196 012B  BF 0280				mov DI, 640
+     197 012E  B9 000A				mov CX, 10
+     198 0131				screen3:
+     199 0131  8A 07				mov AL, byte ptr [BX]
+     200 0133  AB				stosw
+     201 0134  43				inc BX
+     202 0135  E2 FA				loop screen3
+     203				
+     204 0137  B8 4C00				mov AX, 4C00h
+     205 013A  CD 21				int 21h 
+     206 013C				main endp 
+     207				
+     208 = 013C				code_size=$-main 
+     209 013C				text ends
+     210				
+     211 0000				stk segment stack 'stack'
+     212 0000  0100[				db 256 dup ('^')
+     213	   5E			
+     214			 ]	
+     215				
+     216 0100				stk ends 
+     217				
+     218				end main 
+Microsoft (R) Macro Assembler Version 5.10                  10/10/19 11:25:1
                                                              Symbols-1
 
 
@@ -330,7 +298,7 @@ Segments and Groups:
 
 DATA . . . . . . . . . . . . . .  	32 Bit	004A	PARA	NONE	
 STK  . . . . . . . . . . . . . .  	32 Bit	0100	PARA	STACK	'STACK'
-TEXT . . . . . . . . . . . . . .  	16 Bit	0187	PARA	NONE	'CODE'
+TEXT . . . . . . . . . . . . . .  	16 Bit	013C	PARA	NONE	'CODE'
 
 Symbols:            
 
@@ -338,14 +306,10 @@ Symbols:
 
 ATTR . . . . . . . . . . . . . .  	L BYTE	0030	DATA
 
-CHECK_MEM  . . . . . . . . . . .  	L NEAR	00D6	TEXT
-CODE_SIZE  . . . . . . . . . . .  	NUMBER	0187	
+CODE_SIZE  . . . . . . . . . . .  	NUMBER	013C	
 CONTINUE . . . . . . . . . . . .  	L NEAR	009F	TEXT
 
 DATA_SIZE  . . . . . . . . . . .  	NUMBER	004A	
-DIVIDE . . . . . . . . . . . . .  	L NEAR	00F6	TEXT
-
-END_MEM  . . . . . . . . . . . .  	L NEAR	00EA	TEXT
 
 GDT_CODE . . . . . . . . . . . .  	L QWORD	0010	DATA
 GDT_DATA . . . . . . . . . . . .  	L QWORD	0008	DATA
@@ -353,35 +317,35 @@ GDT_NULL . . . . . . . . . . . .  	L QWORD	0000	DATA
 GDT_SCREEN . . . . . . . . . . .  	L QWORD	0020	DATA
 GDT_SIZE . . . . . . . . . . . .  	NUMBER	0028	
 GDT_STACK  . . . . . . . . . . .  	L QWORD	0018	DATA
-GO . . . . . . . . . . . . . . .  	L NEAR	014B	TEXT
+GO . . . . . . . . . . . . . . .  	L NEAR	0100	TEXT
 
-MAIN . . . . . . . . . . . . . .  	N PROC	0000	TEXT	Length = 0187
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	TEXT	Length = 013C
 MEM  . . . . . . . . . . . . . .  	L NEAR	00C8	TEXT
 MES1 . . . . . . . . . . . . . .  	L BYTE	0031	DATA
 MES2 . . . . . . . . . . . . . .  	L BYTE	003B	DATA
 
 PDESCR . . . . . . . . . . . . .  	L QWORD	0028	DATA
 
-RETURN . . . . . . . . . . . . .  	L NEAR	015A	TEXT
+RETURN . . . . . . . . . . . . .  	L NEAR	010F	TEXT
 
 SCREEN1  . . . . . . . . . . . .  	L NEAR	0020	TEXT
-Microsoft (R) Macro Assembler Version 5.10                  10/10/19 10:18:4
+SCREEN2  . . . . . . . . . . . .  	L NEAR	00C1	TEXT
+SCREEN3  . . . . . . . . . . . .  	L NEAR	0131	TEXT
+
+@CPU . . . . . . . . . . . . . .  	TEXT  3471		
+Microsoft (R) Macro Assembler Version 5.10                  10/10/19 11:25:1
                                                              Symbols-2
 
 
-SCREEN2  . . . . . . . . . . . .  	L NEAR	00C1	TEXT
-SCREEN3  . . . . . . . . . . . .  	L NEAR	017C	TEXT
-
-@CPU . . . . . . . . . . . . . .  	TEXT  3471		
 @FILENAME  . . . . . . . . . . .  	TEXT  n		
 @VERSION . . . . . . . . . . . .  	TEXT  510		
 
 
-    200 Source  Lines
-    200 Total   Lines
-     40 Symbols
+    175 Source  Lines
+    175 Total   Lines
+     37 Symbols
 
-  47410 + 449611 Bytes symbol space free
+  47410 + 451658 Bytes symbol space free
 
       1 Warning Errors
       0 Severe  Errors

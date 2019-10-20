@@ -36,7 +36,7 @@ main proc
 	mov ES, AX
 	mov EBX, offset mes1
 	mov AH, attr
-	mov DI, 0
+	mov DI, 160
 	mov CX, 10
 screen1:
 	mov AL, byte ptr [EBX]
@@ -97,7 +97,7 @@ continue:
 	
 	mov AX, 32 ;Селектор сеrмента видеобуфера 
 	mov ES, AX 
-	mov DI, 160 
+	mov DI, 320 
 	mov CX, 15
 	mov AH, attr
 	mov EBX, offset mes2
@@ -110,32 +110,7 @@ screen2:
 	
 	;Определим объём доступной физ. памяти
 mem:
-	mov EBX, 100001h
-	mov DL, 49h ;рандомное значение
-	mov ECX, 0ffeffffeh
 
-check_mem:
-	mov DH, DS:[EBX]
-	mov DS:[EBX], DL ; запись сигнатуры
-	cmp DS:[EBX], DL ; сравнение сигнатуры
-	jne end_mem
-	mov DS:[EBX], DH
-	inc EBX
-	loop check_mem
-	
-end_mem:
-	mov EAX, EBX
-	mov BX, 340
-	mov ECX, 10
-divide:	
-	xor EDX, EDX
-	div ECX
-	add EDX, '0'
-	mov DH, attr
-	mov ES:[BX], DX
-	sub BX, 2
-	cmp EAX, 0
-	jnz divide
 	
 	
 	;Подrотовим переход в реальный режим 

@@ -1,2 +1,1 @@
-drop DATABASE MusicLabelsDB;
-go
+drop schema dbo cascade ;
