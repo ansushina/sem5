@@ -1,6 +1,7 @@
 #include "tests.h"
 #include <cstdlib>
 #include <stdio.h>
+#include <time.h>
 
 #include "finddistance.h"
 
@@ -37,6 +38,7 @@ void test() {
     Livinshtein finder;
     DamerauLiv finder2;
     DamerauLivRec finder3;
+
 
     // time
     std::cout << "Тестирование по времени..."<< std::endl;
