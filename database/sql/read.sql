@@ -20,3 +20,4 @@ copy dbo.sa (id, songid, artistid) FROM '/tmp/sa.csv' delimiter ';' csv;
 
 copy dbo.sc (id, songid, composerid) from '/tmp/sc.csv' delimiter ';' csv;
 
+select * from dbo.composer;

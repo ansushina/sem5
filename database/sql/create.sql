@@ -10,8 +10,6 @@ create table dbo.Label(
     Creator varchar(50)
 );
 
-
-
 create table dbo.Artist(
     ArtistID int not null PRIMARY KEY,
     Name varchar(50),
@@ -49,10 +47,11 @@ create table dbo.Song(
 );
 
 
+
 select * from dbo.Label;
 select * from dbo.Artist;
 select * from dbo.Composer;
 select * from dbo.Song;
 select * from dbo.MusicVideo;
-
-select * from dbo.Artist where labelid = 1027;
+select * from dbo.sc;
+select * from dbo.sa;
