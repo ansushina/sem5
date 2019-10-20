@@ -95,11 +95,11 @@ Matrix Vinograd1(Matrix A, Matrix B) {
     }
 
     std::vector<int> MulV(Q,0);
-    for (int i = 0; i < Q-1; i++)
+    for (int i = 0; i < Q; i++)
     {
-        for (int k = 0; k < N; k += 2)
+        for (int k = 0; k < N-1; k += 2)
         {
-            MulV[i] = -B[k][i]*B[k+1][i];
+            MulV[i] -= B[k][i]*B[k+1][i];
         }
 
     }
@@ -133,7 +133,7 @@ Matrix Vinograd2(Matrix A, Matrix B) {
     std::vector<int> MulH(M,0);
     for (int i = 0; i < M; i++)
     {
-        for (int k = 0; k < N; k += 2)
+        for (int k = 0; k < N-1; k += 2)
         {
             MulH[i] -= A[i][k] * A[i][k+1];
         }
@@ -143,7 +143,7 @@ Matrix Vinograd2(Matrix A, Matrix B) {
     std::vector<int> MulV(Q,0);
     for (int i = 0; i < Q; i++)
     {
-        for (int k = 0; k < N; k += 2)
+        for (int k = 0; k < N-1; k += 2)
         {
             MulV[i] -= B[k][i]*B[k+1][i];
         }
@@ -152,7 +152,7 @@ Matrix Vinograd2(Matrix A, Matrix B) {
     for (int i = 0; i < M; i++) {
         for (int j = 0; j < Q; j++) {
             c[i][j] = MulH[i] + MulV[j];
-            for (int k = 0; k < N; k += 2) {
+            for (int k = 0; k < N-1; k += 2) {
                 c[i][j] += (A[i][k] + B[k+1][j])*(A[i][k+1] + B[k][j]);
             }
             if (N%2 == 1) {
