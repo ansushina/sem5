@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+*.OBJ
 
 # Precompiled Headers
 *.gch
@@ -30,8 +31,13 @@
 *.exe
 *.out
 *.app
+*.EXE
 
 
+*.MAP
+*.CRF
 */.idea/*
 
 */.vscode/*
+*/*-Debug/*
+
