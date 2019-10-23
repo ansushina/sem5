@@ -1,21 +1,18 @@
 #include "alg.h"
 
-
-Matrix standart(Matrix m1, Matrix m2) {
+#pragma optimize("", off)
+void standart(Matrix& m1, Matrix& m2, Matrix& c) {
     int N = m1.cols();
     int M = m1.rows();
     int Q = m2.cols();
-    Matrix c(M, Q);
 
     for (int i = 0; i < M; i++) {
         for (int j = 0; j < Q; j++) {
             for (int k = 0; k < N; k++) {
                 c[i][j] = c[i][j]+m1[i][k]*m2[k][j];
-
             }
         }
     }
-    return c;
 }
 
 Matrix standartO(Matrix m1, Matrix m2) {
@@ -33,7 +30,7 @@ Matrix standartO(Matrix m1, Matrix m2) {
     }
     return c;
 }
-
+#pragma optimize("", off)
 Matrix Vinograd(Matrix A, Matrix B) {
     int N = A.cols();
     int M = A.rows();
@@ -75,7 +72,6 @@ Matrix Vinograd(Matrix A, Matrix B) {
             }
         }
     }
-    c.print();
     return c;
 }
 
@@ -120,10 +116,9 @@ Matrix Vinograd1(Matrix A, Matrix B) {
             }
         }
     }
-    c.print();
     return c;
 }
-
+#pragma optimize("", off)
 Matrix Vinograd2(Matrix A, Matrix B) {
     int N = A.cols();
     int M = A.rows();
@@ -151,15 +146,15 @@ Matrix Vinograd2(Matrix A, Matrix B) {
 
     for (int i = 0; i < M; i++) {
         for (int j = 0; j < Q; j++) {
-            c[i][j] = MulH[i] + MulV[j];
+            int buf = MulH[i] + MulV[j];
             for (int k = 0; k < N-1; k += 2) {
-                c[i][j] += (A[i][k] + B[k+1][j])*(A[i][k+1] + B[k][j]);
+                buf += (A[i][k] + B[k+1][j])*(A[i][k+1] + B[k][j]);
             }
             if (N%2 == 1) {
-                 c[i][j] += A[i][N-1]*B[N-1][j];
+                 buf += A[i][N-1]*B[N-1][j];
             }
+            c[i][j] = buf;
         }
     }
-    c.print();
     return c;
 }
