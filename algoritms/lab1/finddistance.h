@@ -133,6 +133,7 @@ public:
             step = 0;
         }
 
+
         int first = this->count(s1.substr(0, len1), s2.substr(0,len2-1)) + 1;
         int second = this->count(s1.substr(0, len1-1), s2.substr(0,len2)) + 1;
         int third = this->count(s1.substr(0, len1-1), s2.substr(0,len2-1)) + step;
