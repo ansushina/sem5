@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include <stdio.h>
 #include <time.h>
+#include <cstdio>
+#include <ctime>
 
 #include "finddistance.h"
 
@@ -43,7 +45,7 @@ void test() {
     // time
     std::cout << "Тестирование по времени..."<< std::endl;
     printf("%2s %15s %15s %15s\n", "N" , "Livinshtein", "DamerauLiv", "RecDamerauLiv");
-    unsigned int time = 0;
+    std::clock_t time = 0;
     for (int j = 1; j < 11; j++) {
         char s1[j], s2[j];
         printf("%2d", j);
@@ -53,10 +55,10 @@ void test() {
             gen_random(s1,j);
             //printf("%s\n", s1);
             gen_random(s2,j);
-            unsigned int tick1 = tick();
+            std::clock_t start = std::clock();
             finder.count(s1,s2);
-            unsigned int tick2 = tick();
-            time += tick2-tick1;
+            std::clock_t end = std::clock();
+            time += end-start;
         }
         printf("%15d", time/100);
         time = 0;
@@ -64,10 +66,10 @@ void test() {
         {
             gen_random(s1,j);
             gen_random(s2,j);
-            unsigned int tick1 = tick();
+            std::clock_t start = std::clock();
             finder2.count(s1,s2);
-            unsigned int tick2 = tick();
-            time += tick2-tick1;
+            std::clock_t end = std::clock();
+            time += end-start;
         }
         printf("%15d", time/100);
         time = 0;
@@ -75,10 +77,10 @@ void test() {
         {
             gen_random(s1,j);
             gen_random(s2,j);
-            unsigned int tick1 = tick();
+            std::clock_t start = std::clock();
             finder3.count(s1,s2);
-            unsigned int tick2 = tick();
-            time += tick2-tick1;
+            std::clock_t end = std::clock();
+            time += end-start;
         }
         printf("%15d\n", time/100);
     }
@@ -95,10 +97,10 @@ void test() {
 
             gen_random(s1,j);
             gen_random(s2,j);
-            unsigned int tick1 = tick();
+            std::clock_t start = std::clock();
             finder.count(s1,s2);
-            unsigned int tick2 = tick();
-            time += tick2-tick1;
+            std::clock_t end = std::clock();
+            time += end-start;
         }
         printf("%15d", time/100);
         time = 0;
@@ -106,10 +108,10 @@ void test() {
         {
             gen_random(s1,j);
             gen_random(s2,j);
-            unsigned int tick1 = tick();
+            std::clock_t start = std::clock();
             finder2.count(s1,s2);
-            unsigned int tick2 = tick();
-            time += tick2-tick1;
+            std::clock_t end = std::clock();
+            time += end-start;
         }
 
         printf("%15d\n", time/100);

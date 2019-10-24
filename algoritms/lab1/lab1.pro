@@ -4,7 +4,6 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    finddistance.cpp \
     matrix.cpp \
     tests.cpp
 
