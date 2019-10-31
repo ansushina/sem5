@@ -36,6 +36,9 @@ void makeArrayRand(int * arr, int n) {
 }
 
 void test() {
+    test1();
+    test2();
+    test3();
 
     int repeat = 50;
     int begin = 100;
@@ -180,4 +183,284 @@ void test() {
     }
 
     fclose(f);
+}
+
+bool cmp_arr(int *arr, int *arr2, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] != arr2[i])
+            return false;
+    }
+    return true;
+}
+
+void test1() {
+    printf("TEST Sheker\n");
+    {
+        printf("test 1: ");
+        int n = 1;
+        int arr[] = {1};
+        int answ[] = {1};
+
+        shekerSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 2: ");
+        int n = 2;
+        int arr[] = {1,2};
+        int answ[] = {1,2};
+
+        shekerSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 3: ");
+        int n = 2;
+        int arr[] = {2,1};
+        int answ[] = {1,2};
+
+        shekerSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 4: ");
+        int n = 5;
+        int arr[] = {5,4,3,2,1};
+        int answ[] = {1,2,3,4,5};
+
+        shekerSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 5: ");
+        int n = 5;
+        int arr[] = {1,2,3,4,5};
+        int answ[] = {1,2,3,4,5};
+
+        shekerSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+
+    {
+        printf("test 6: ");
+        int n = 5;
+        int arr[] = {4,5,2,1,3};
+        int answ[] = {1,2,3,4,5};
+
+        shekerSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 7: ");
+        int n = 9;
+        int arr[] = {3,1,3,4,1,2,5,7,3};
+        int answ[] = {1,1,2,3,3,3,4,5,7};
+
+        shekerSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+
+}
+
+void test2() {
+    printf("TEST insertion\n");
+    {
+        printf("test 1: ");
+        int n = 1;
+        int arr[] = {1};
+        int answ[] = {1};
+
+        insertionSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 2: ");
+        int n = 2;
+        int arr[] = {1,2};
+        int answ[] = {1,2};
+
+        insertionSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 3: ");
+        int n = 2;
+        int arr[] = {2,1};
+        int answ[] = {1,2};
+
+        insertionSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 4: ");
+        int n = 5;
+        int arr[] = {5,4,3,2,1};
+        int answ[] = {1,2,3,4,5};
+
+        insertionSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 5: ");
+        int n = 5;
+        int arr[] = {1,2,3,4,5};
+        int answ[] = {1,2,3,4,5};
+
+        insertionSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+
+    {
+        printf("test 6: ");
+        int n = 5;
+        int arr[] = {4,5,2,1,3};
+        int answ[] = {1,2,3,4,5};
+
+        insertionSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 7: ");
+        int n = 9;
+        int arr[] = {3,1,3,4,1,2,5,7,3};
+        int answ[] = {1,1,2,3,3,3,4,5,7};
+
+        insertionSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+
+}
+
+void test3() {
+    printf("TEST merge sort\n");
+    {
+        printf("test 1: ");
+        int n = 1;
+        int arr[] = {1};
+        int answ[] = {1};
+
+        myMergeSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 2: ");
+        int n = 2;
+        int arr[] = {1,2};
+        int answ[] = {1,2};
+
+        myMergeSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 3: ");
+        int n = 2;
+        int arr[] = {2,1};
+        int answ[] = {1,2};
+
+        myMergeSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 4: ");
+        int n = 5;
+        int arr[] = {5,4,3,2,1};
+        int answ[] = {1,2,3,4,5};
+
+        myMergeSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 5: ");
+        int n = 5;
+        int arr[] = {1,2,3,4,5};
+        int answ[] = {1,2,3,4,5};
+
+        myMergeSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+
+    {
+        printf("test 6: ");
+        int n = 5;
+        int arr[] = {4,5,2,1,3};
+        int answ[] = {1,2,3,4,5};
+
+        myMergeSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+    {
+        printf("test 7: ");
+        int n = 9;
+        int arr[] = {3,1,3,4,1,2,5,7,3};
+        int answ[] = {1,1,2,3,3,3,4,5,7};
+
+        myMergeSort(arr, n);
+        if (cmp_arr(arr, answ, n))
+            printf("ok\n");
+        else
+            printf("failed\n");
+    }
+
 }
