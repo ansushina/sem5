@@ -56,7 +56,6 @@ Matrix Vinograd(Matrix A, Matrix B) {
 
     }
 
-
     for (int i = 0; i < M; i++) {
         for (int j = 0; j < Q; j++) {
             c[i][j] = -MulH[i] - MulV[j];

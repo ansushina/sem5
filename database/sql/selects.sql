@@ -233,11 +233,39 @@ having count(*) > (
 order by cnt;
 
 --23 Инструкция SELECT, использующая рекурсивное обобщенное табличное выражение.
-with recursive rec as
+
+alter table dbo.artist add constraint FK_LA foreign key (labelID) references dbo.label(labelid);
+
+
+select a.name, a.age  from
+(select artistid, name, surname, age
+        from dbo.artist
+        where age = (
+            select max(age)
+            from dbo.artist)) as aa join dbo.artist a  on aa.age = a.age+30
+
+select *
+from dbo.artist where age = 30
+
+
+with recursive rec(artistid, name, surname, age) as
     (
-        select
+        select artistid, name, surname, age
+        from dbo.artist
+        where age = (
+            select max(age)
+            from dbo.artist)
+
+        union all
+
+        select a.artistid, a.name, a.surname, a.age
+        from dbo.artist a join rec on rec.age = a.age+30
     )
 
+select artistid, age, count(*)
+from rec
+group by artistid, age
+order by age;
 
 
 --24 Оконные функции. Использование конструкций MIN/MAX/AVG OVER()

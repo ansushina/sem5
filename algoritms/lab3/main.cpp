@@ -20,7 +20,7 @@ int main()
 {
     srand(time(NULL));
     setbuf(stdout, NULL);
-    test();
+    //test();
 
     int n;
     std::cout << "Input n: ";
