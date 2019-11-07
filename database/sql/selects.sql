@@ -19,7 +19,8 @@ order by l1.country, l1.title;
 -- все артисты от 18 до 30
 select distinct a.name, a.age
 from dbo.artist a
-where a.age between 18 and 30;
+where a.age between 18 and 30
+order by age;
 
 select distinct a.name, a.age
 from dbo.artist a
@@ -40,16 +41,17 @@ where a.labelid in (
     from dbo.label l
     where l.country = 'Congo'
     )
+order by labelid
 
 --5 Инструкция SELECT, использующая предикат EXISTS с вложенным подзапросом.
 -- выбрать все песни для которых неизвестен артист
-select songid, title
-from dbo.song as s1
+select *
+from dbo.song as s1 left join dbo.sa on s1.songid = sa.songid
 where exists (
     select  distinct dbo.song.songid
     from dbo.song left join dbo.sa on song.songid = sa.songid
     where sa.songid is null and song.songid=s1.songid order by songid )
-order by songid;
+order by s1.songid;
 
 --6 Инструкция SELECT, использующая предикат сравнения с квантором.
 -- вывести всех артистов старше ртистов из мальты
@@ -59,14 +61,15 @@ where age > all (
     select age
     from dbo.artist
     where country='Malta'
-    );
+    )
+order by age;
 
 --7 Инструкция SELECT, использующая агрегатные функции в выражениях столбцов.
 -- средний возраст артистов из каждой страны
 select country, avg(age) as avg, max(age)/min(age) as diff, min(age), max(age), count(*)
 from dbo.artist
 group by country
-order by country
+order by count
 
 --8 Инструкция SELECT, использующая скалярные подзапросы в выражениях столбцов.
 -- подсчитываем количество песен у каждого артиста младше 30
@@ -133,7 +136,7 @@ order by title
 
 --13 Инструкция SELECT, использующая вложенные подзапросы с уровнем вложенности 3.
 -- выбрать все компании, в которых состоят самые старые артисты
-select title, name, surname
+select title, name, surname, age
 from dbo.label join (
     select artistid, age, name, surname, labelid
     from dbo.artist a
@@ -273,3 +276,11 @@ SELECT *,
 AVG(age) OVER(partition by sex) AS AvgAge, MIN(age) OVER(partition by sex) AS Min,
 MAX(age) OVER(partition by sex) AS MaxP
 FROM dbo.artist;
+
+
+--25 оконные функции для устранения дублей
+select * from (
+select name, surname, age, country, sex,
+       row_number() over (partition by a.artistid) as row
+FROM dbo.artist a join dbo.sa on sa.artistid = a.artistid) as aa
+where row = 1;

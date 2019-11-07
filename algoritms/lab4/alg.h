@@ -3,8 +3,8 @@
 
 #include "matrix.h"
 
-void standart(Matrix& m1, Matrix& m2, Matrix& c);
-Matrix Vinograd(Matrix A, Matrix B);
-Matrix Vinograd1(Matrix A, Matrix B);
-Matrix Vinograd2(Matrix A, Matrix B);
-#endif // ALG_H
+Matrix Vinograd3(Matrix A, Matrix B);
+Matrix Mul2(Matrix A, Matrix B);
+Matrix Mul4(Matrix A, Matrix B);
+Matrix Mul(Matrix A, Matrix B, int tcount);
+#endif // ALG_H;

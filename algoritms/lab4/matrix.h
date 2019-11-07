@@ -12,7 +12,7 @@ typedef int ** matrix_t;
 
 class Matrix {
 public:
-    Matrix(int n, int m): matrix(n) {
+    Matrix(size_t n, size_t m): matrix(n) {
         for (size_t i = 0; i < matrix.size(); i++)
         {
              matrix[i].resize(m);
@@ -23,10 +23,10 @@ public:
         }
     }
 
-    void addRow(int n, std::vector<int> row) {
+    void addRow(size_t n, std::vector<int> row) {
         if (matrix[0].size() != row.size() || n >= matrix.size())
             return;
-        for (int i = 0; i < matrix[0].size(); i++) {
+        for (size_t i = 0; i < matrix[0].size(); i++) {
             matrix[n][i] = row[i];
         }
     }
@@ -68,10 +68,10 @@ public:
         }
     }
 
-    int rows() const {
+    size_t rows() const {
         return matrix.size();
     }
-    int cols() const {
+    size_t cols() const {
         return matrix[0].size();
     }
 private:
