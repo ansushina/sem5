@@ -45,7 +45,7 @@ void first (std::vector<int> &MulH, Matrix A, int N, int start, int end)
     for (int i = start; i < end; i++) {
         for (int k = 0; k < N-1; k += 2) {
             MulH[i] -= A[i][k] * A[i][k+1];
-            //cout << "1  ";
+            cout << " ";
         }
     }
 }
@@ -54,7 +54,7 @@ void second (std::vector<int> &MulV, Matrix B, int N, int start, int end) {
     for (int i = start; i < end; i++) {
         for (int k = 0; k < N-1; k += 2) {
             MulV[i] -= B[k][i]*B[k+1][i];
-            //cout << "aaa";
+            cout << "a";
         }
     }
 }

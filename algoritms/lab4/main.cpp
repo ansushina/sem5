@@ -10,7 +10,7 @@ using namespace std;
 void time_test() {
     FILE *f = fopen("time.txt", "w");
     fprintf(f,"%5s,%15s,%15s,%15s\n", "N" , "1", "2", "vinograd2");
-    printf("%5s,%15s,%15s,%15s\n", "N" , "1", "2", "vinograd2");
+    printf("%5s,%15s,%15s,%15s\n", "N" , "1", "2", "8");
     //unsigned int time = 0;
     std::clock_t time = 0;
     int repeat = 5;
@@ -22,12 +22,12 @@ void time_test() {
         Matrix m2(i,i);
         Matrix c (i, i);
         time = 0;
+        m1.make_random();
+        m2.make_random();
         for (int j = 0; j < repeat ; j++)
         {
-            m1.make_random();
-            m2.make_random();
             std::clock_t start = std::clock();
-            Vinograd3(m1,m2);
+            Vinograd2(m1,m2);
             std::clock_t end = std::clock();
             time += end-start;
         }
@@ -36,8 +36,6 @@ void time_test() {
         time = 0;
         for (int j = 0; j < repeat ; j++)
         {
-            m1.make_random();
-            m2.make_random();
             std::clock_t start = std::clock();
             Mul2(m1,m2);
             std::clock_t end = std::clock();
@@ -48,10 +46,9 @@ void time_test() {
         time = 0;
         for (int j = 0; j < repeat ; j++)
         {
-            m1.make_random();
-            m2.make_random();
+
             std::clock_t start = std::clock();
-            Mul(m1,m2,8);
+            Mul4(m1,m2);
             std::clock_t end = std::clock();
             time += end-start;
         }
