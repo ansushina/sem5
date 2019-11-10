@@ -7,5 +7,7 @@ Matrix Vinograd3(Matrix A, Matrix B);
 Matrix Vinograd2(Matrix A, Matrix B);
 Matrix Mul2(Matrix A, Matrix B);
 Matrix Mul4(Matrix A, Matrix B);
+Matrix Mul8(Matrix A, Matrix B);
+Matrix Mul16(Matrix A, Matrix B);
 Matrix Mul(Matrix A, Matrix B, int tcount);
 #endif // ALG_H;
