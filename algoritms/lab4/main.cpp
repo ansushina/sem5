@@ -14,7 +14,7 @@ void time_test() {
     //unsigned int time = 0;
     std::clock_t time = 0;
     int repeat = 5;
-    for (int i = 1000; i <= 2000; i+=100)
+    for (int i = 101; i <= 1001; i+=100)
     {
         fprintf(f, "%5d,", i);
         printf("%5d,", i);
