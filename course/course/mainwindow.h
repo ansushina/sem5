@@ -15,8 +15,16 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_pushButton_2_clicked();
+
+    void on_clear_button_clicked();
+
 private:
     Ui::MainWindow *ui;
+    QPainter *painter;
+    QPixmap *scene;
+    bool clear_flag;
 };
 
 #endif // MAINWINDOW_H

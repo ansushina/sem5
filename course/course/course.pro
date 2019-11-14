@@ -27,12 +27,15 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     particle.cpp \
-    Noise.cpp
+    Noise.cpp \
+    camera.cpp
 
 HEADERS += \
         mainwindow.h \
     particle.h \
-    Noise.h
+    Noise.h \
+    camera.h \
+    point.h
 
 FORMS += \
         mainwindow.ui
