@@ -26,16 +26,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    particle.cpp \
     Noise.cpp \
-    camera.cpp
+    camera.cpp \
+    matrix.cpp
 
 HEADERS += \
         mainwindow.h \
-    particle.h \
     Noise.h \
     camera.h \
-    point.h
+    point.h \
+    point.h \
+    matrix.h \
+    point.h \
+    myscene.h \
+    axis.h
 
 FORMS += \
         mainwindow.ui
