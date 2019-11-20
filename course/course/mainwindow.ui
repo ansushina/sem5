@@ -43,9 +43,9 @@
    <widget class="QPushButton" name="clear_button">
     <property name="geometry">
      <rect>
-      <x>1020</x>
-      <y>470</y>
-      <width>171</width>
+      <x>920</x>
+      <y>780</y>
+      <width>281</width>
       <height>51</height>
      </rect>
     </property>

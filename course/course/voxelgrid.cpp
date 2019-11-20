@@ -15,9 +15,9 @@ VoxelGrid::VoxelGrid(double size, int x, int y, int z, double d):
     voxelsize(size),
     defaultDensity(d)
 {
-    for (double kk = 0; kk < zCount; kk++) {
-        for (double jj = 0; jj < yCount; jj++) {
-            for (double ii = 0; ii < xCount; ii++) {
+    for (double kk = 0; kk < zcount; kk++) {
+        for (double jj = 0; jj < ycount; jj++) {
+            for (double ii = 0; ii < xcount; ii++) {
                 Voxel voxel;
                 voxel.density = defaultDensity;
                 grid.push_back(voxel);
@@ -26,7 +26,7 @@ VoxelGrid::VoxelGrid(double size, int x, int y, int z, double d):
     }
 }
 
-inline int VoxelGrid::outside(int x, int y, int z) {
+bool VoxelGrid::outside(int x, int y, int z) {
     if ((x >= xcount) || (y >= ycount) || (z >= zcount) || (x < 0) || (y < 0) || (z < 0)) {
         return true;
     }

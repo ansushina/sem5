@@ -37,9 +37,7 @@ HEADERS += \
     Noise.h \
     camera.h \
     point.h \
-    point.h \
     matrix.h \
-    point.h \
     myscene.h \
     axis.h \
     voxelgrid.h \

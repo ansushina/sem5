@@ -44,7 +44,8 @@ public:
         return *(this->scene);
     }
 
-    void drawPoint(point p) {
+    void drawPoint(point p, QColor color = Qt::black) {
+        painter->setPen(color);
         clear_flag = false;
         double z1 = sqrt(2)/2 * p.z();
         painter->drawPoint(XCENTER+p.x() - z1, YCENTER-p.y() + z1);

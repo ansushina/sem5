@@ -30,9 +30,9 @@ public:
        oz.rorateX(ax);
        oz.rorateY(ay);
        oz.rorateZ(az);
-       ox.print();
-       oy.print();
-       oz.print();
+       //ox.print();
+       //oy.print();
+       //oz.print();
     }
 
     void render(Scene &scene) {
@@ -42,9 +42,9 @@ public:
         scene.drawLine(center, oy);
         scene.setColor(Qt::blue);
         scene.drawLine(center, oz);
-        ox.print();
-        oy.print();
-        oz.print();
+        //ox.print();
+        //oy.print();
+        //oz.print();
     }
 
 private:

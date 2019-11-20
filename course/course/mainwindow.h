@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include "myscene.h"
 #include "axis.h"
+#include "render.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,10 +23,13 @@ public:
 private slots:
     void on_clear_button_clicked();
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     Scene myScene;
     Axis xyz;
+    Render generateCloud;
 
     double alphax, alphay, alphaz;
 };

@@ -5,14 +5,28 @@
 #include<math.h>
 
 
-typedef MyVector<int, 3> vec3;
+
 
 template <typename T, size_t size>
 class MyVector{
 public:
     MyVector() {
-        for (int i =0; i < size; i++){
+        vec.resize(size);
+        for (size_t i = 0; i < size; i++){
             vec[i] = 0;
+        }
+    }
+    MyVector(T a1, T a2, T a3) {
+        vec.resize(size);
+        vec[0] = a1;
+        vec[1] = a2;
+        vec[2] = a3;
+    }
+
+    MyVector(const MyVector<T, size> &v) {
+        vec.resize(size);
+        for (size_t i =0; i < size; i++){
+            vec[i] = v[i];
         }
     }
 
@@ -24,21 +38,25 @@ public:
         return vec[n];
     }
 
-    int lenght() {
-        return size;
+    double length() {
+        return sqrt(length2());
     }
 
-    int lenght2() {
-        return size*size;
+    double length2() {
+        T sum = 0;
+        for (size_t i = 0; i < size; i++) {
+            sum += vec[i]*vec[i];
+        }
+        return sum;
     }
 
     MyVector& normalize() const
     {
         T sum = 0;
-        for (int i = 0; i < size; i++) {
+        for (size_t i = 0; i < size; i++) {
             sum += vec[i]*vec[i];
         }
-        int inv_length = 1.0f / sqrt(sum);
+        double inv_length = 1.0f / sqrt(sum);
         return (*this * inv_length);
     }
 
@@ -114,7 +132,7 @@ public:
         return res;
     }
 
-    MyVector operator / (const MyVector& a, const double d){
+    MyVector operator / (const double d){
         MyVector a;
 
         for (size_t i = 0; i < size; i++) {
@@ -136,8 +154,9 @@ public:
     }
 
 private:
-    std::vector<T> vec(size);
+    std::vector<T> vec;
 };
 
+typedef MyVector<double, 3> vec3;
 
 #endif // VECTOR3_H

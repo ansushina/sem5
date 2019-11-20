@@ -3,7 +3,7 @@
 #include <vector>
 #include <QColor>
 #include "vector3.h"
-
+#include <stdio.h>
 
 struct Voxel {
     QColor qcolor;
@@ -11,6 +11,10 @@ struct Voxel {
 
     double density; //плотность
     double transmissivity; // прозратчность
+
+    void print(){
+        printf("voxel: color(%lf, %lf, %lf), density: %lf, transm.: %lf \n", color[0], color[1], color[2], density, transmissivity);
+    }
 };
 
 class VoxelGrid
@@ -26,6 +30,15 @@ public:
     void setVoxelDensity(int x, int y, int z, double q);
     void setVoxelTransmissivity(int x, int y, int z, double q);
 
+    void printVoxel(int x, int y, int z) {
+        if (outside(x,y,z)) {
+            return;
+        }
+
+        printf("[%d, %d, %d]", x, y, z);
+        int index = getVoxelIndex(x, y, z);
+        grid[index].print();
+    }
     vec3 getVoxelColor(int x, int y, int z);
     double getVoxelDensity(int x, int y, int z);
     double getVoxelTransmissivity(int x, int y, int z);
