@@ -52,8 +52,8 @@ public:
 
     void drawLine(point p1, point p2) {
         clear_flag = false;
-        double z1 = sqrt(2)/2 * p1.z();
-        double z2 = sqrt(2)/2 * p2.z();
+        double z1 = 0;//sqrt(2)/2 * p1.z();
+        double z2 = 0;//sqrt(2)/2 * p2.z();
         painter->drawLine(XCENTER + p1.x() - z1, YCENTER - p1.y() + z1,
                              XCENTER+p2.x() - z2, YCENTER - p2.y() + z2);
     }

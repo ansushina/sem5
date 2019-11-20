@@ -28,7 +28,9 @@ SOURCES += \
         mainwindow.cpp \
     Noise.cpp \
     camera.cpp \
-    matrix.cpp
+    matrix.cpp \
+    voxelgrid.cpp \
+    render.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +41,10 @@ HEADERS += \
     matrix.h \
     point.h \
     myscene.h \
-    axis.h
+    axis.h \
+    voxelgrid.h \
+    vector3.h \
+    render.h
 
 FORMS += \
         mainwindow.ui
