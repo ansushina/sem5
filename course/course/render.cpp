@@ -43,7 +43,7 @@ void Render::generateVoxelGridRandom(int seed)
                 vec3 color(255, 255, 255);
                 grid->setVoxelColor(ii, jj, kk, color);
 
-                grid->printVoxel(ii,jj,kk);
+                //grid->printVoxel(ii,jj,kk);
             }
         }
         // Render progress 0%-99%

@@ -18,6 +18,10 @@ private:
     bool clear_flag;
 
 public:
+    double alphax=0, alphay=0, alphaz=0;
+    double k;
+    double dx, dy,xz;
+
     Scene() {
         scene = new QPixmap(900, 900);
         scene->fill(QColor(Qt::black));
@@ -48,11 +52,22 @@ public:
         painter->setPen(color);
         clear_flag = false;
         double z1 = sqrt(2)/2 * p.z();
+        p.rorateX(alphax);
+        p.rorateY(alphay);
+        p.rorateZ(alphaz);
         painter->drawPoint(XCENTER+p.x() - z1, YCENTER-p.y() + z1);
     }
 
     void drawLine(point p1, point p2) {
         clear_flag = false;
+        p1.rorateX(alphax);
+        p1.rorateY(alphay);
+        p1.rorateZ(alphaz);
+        p2.rorateX(alphax);
+        p2.rorateY(alphay);
+        p2.rorateZ(alphaz);
+
+
         double z1 = 0;//sqrt(2)/2 * p1.z();
         double z2 = 0;//sqrt(2)/2 * p2.z();
         painter->drawLine(XCENTER + p1.x() - z1, YCENTER - p1.y() + z1,

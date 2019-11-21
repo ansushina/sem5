@@ -30,8 +30,6 @@ private:
     Scene myScene;
     Axis xyz;
     Render generateCloud;
-
-    double alphax, alphay, alphaz;
 };
 
 #endif // MAINWINDOW_H
