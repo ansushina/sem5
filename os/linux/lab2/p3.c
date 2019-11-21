@@ -15,6 +15,10 @@ int main(void) {
             perror("Cant fork!\n");
             exit(1);
         } else if (childpid[i] == 0){
+            if (execl("/bin/ps","ps","-a", (char*) 0) == -1) {
+                perror("exec!\n");
+                exit(1);
+            }
             printf("child[%d]: pid=%d; ppid=%d; gid=%d;\n", i, getpid(), getppid(), getgid());
             return 0;
         } else {

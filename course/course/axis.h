@@ -40,7 +40,7 @@ public:
         scene.drawLine(center, ox);
         scene.setColor(Qt::green);
         scene.drawLine(center, oy);
-        scene.setColor(Qt::blue);
+        scene.setColor(Qt::black);
         scene.drawLine(center, oz);
         //ox.print();
         //oy.print();

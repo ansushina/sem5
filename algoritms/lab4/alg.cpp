@@ -1,6 +1,7 @@
 #include "alg.h"
 #include<vector>
 #include<thread>
+#include<stdlib.h>
 
 using namespace std;
 

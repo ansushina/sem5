@@ -26,10 +26,13 @@ private slots:
     void on_pushButton_2_clicked();
 
 private:
+    void renderGrid();
+
     Ui::MainWindow *ui;
     Scene myScene;
     Axis xyz;
     Render generateCloud;
+    VoxelGrid *grid;
 };
 
 #endif // MAINWINDOW_H

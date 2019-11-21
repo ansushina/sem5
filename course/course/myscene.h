@@ -19,15 +19,15 @@ private:
 
 public:
     double alphax=0, alphay=0, alphaz=0;
-    double k;
+    double k = 1;
     double dx, dy,xz;
 
     Scene() {
         scene = new QPixmap(900, 900);
-        scene->fill(QColor(Qt::black));
+        scene->fill(QColor(Qt::blue));
 
         painter = new QPainter(scene);
-        painter->setPen(QPen(Qt::black));
+        painter->setPen(QPen(Qt::blue));
         clear_flag = true;
     }
     ~Scene() {
@@ -39,7 +39,7 @@ public:
         delete painter;
         delete scene;
         scene = new QPixmap(900,900);
-        scene->fill(QColor(Qt::black));
+        scene->fill(QColor(Qt::blue));
         painter = new QPainter(scene);
         clear_flag = true;
     }
@@ -52,21 +52,27 @@ public:
         painter->setPen(color);
         clear_flag = false;
         double z1 = sqrt(2)/2 * p.z();
-        p.rorateX(alphax);
-        p.rorateY(alphay);
-        p.rorateZ(alphaz);
+        if (alphax) p.rorateX(alphax);
+        if (alphay) p.rorateY(alphay);
+        if (alphaz) p.rorateZ(alphaz);
+        if (k != 1) p.scaleUniform({0,0,0}, k);
         painter->drawPoint(XCENTER+p.x() - z1, YCENTER-p.y() + z1);
     }
 
     void drawLine(point p1, point p2) {
         clear_flag = false;
-        p1.rorateX(alphax);
-        p1.rorateY(alphay);
-        p1.rorateZ(alphaz);
-        p2.rorateX(alphax);
-        p2.rorateY(alphay);
-        p2.rorateZ(alphaz);
-
+        if (alphax) {
+            p1.rorateX(alphax);
+            p2.rorateX(alphax);
+        }
+        if (alphay){
+            p1.rorateY(alphay);
+            p2.rorateY(alphay);
+        }
+        if (alphaz) {
+            p1.rorateZ(alphaz);
+            p2.rorateZ(alphaz);
+        }
 
         double z1 = 0;//sqrt(2)/2 * p1.z();
         double z2 = 0;//sqrt(2)/2 * p2.z();

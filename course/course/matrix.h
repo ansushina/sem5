@@ -94,7 +94,9 @@ private:
     std::vector<std::vector<double>> matrix;
 
     Matrix MatrixMul(Matrix A, Matrix B);
+    Matrix Mul2(Matrix A, Matrix B);
 };
+
 
 
 
