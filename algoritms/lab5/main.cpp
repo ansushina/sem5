@@ -20,22 +20,13 @@ static vector<input_t> res;
 
 static mutex m1, m2, m3, resm;
 static int n;
-
-
-unsigned long long tick(void)
-{
-    unsigned long long d;
-    __asm__ __volatile__ ("rdtsc" : "=A" (d) );
-
-    return d;
-}
-static unsigned long long main_time = tick();
+static clock_t main_time = clock();
 
 
 class Logger {
 public:
     Logger() {}
-    static void print(int step, string str, int i, unsigned long long time = 0){
+    static void print(int step, string str, int i, clock_t time = 0){
         std::cout << step <<" step: " << " time: "<< time << "  [" << i << "]" << str  << std::endl;
     }
 };
@@ -90,7 +81,7 @@ void SingleHash() {
         m2.lock();
         queue2.push(newObj);
         sleep(2);
-        unsigned long long time = tick();
+        clock_t time = clock();
         log.print(1, newObj, num, time);
         m2.unlock();
         m1.unlock();
@@ -114,7 +105,7 @@ void MultiHash() {
         m3.lock();
         queue3.push(newObj);
         sleep(3);
-        unsigned long long time = tick();
+        clock_t time = clock();
         log.print(2, newObj, num, time);
         m3.unlock();
         m2.unlock();
@@ -138,7 +129,7 @@ void Result() {
         resm.lock();
         res.push_back(newObj);
         sleep(2);
-        unsigned long long time = tick();
+        clock_t time = clock();
         log.print(3, newObj, num, time);
         resm.unlock();
         m3.unlock();
@@ -161,7 +152,7 @@ int main()
     //res.resize(n);
     //string k = string("dsasd") + string(123);
     char k = 'a' + 1;
-    main_time = tick();
+    main_time = clock();
     for (int i = 0; i < n; i++) {
         if (i % 2 == 0) {
             objvec[i] = string("string") + to_string(i);
@@ -171,7 +162,7 @@ int main()
 
     for (int i = 0; i < n; i++) {
         m1.lock();
-        unsigned long long time = tick();
+        clock_t time = clock();
         log.print(0, objvec[i], i, time);
         queue1.push(objvec[i]);
         m1.unlock();
