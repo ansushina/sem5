@@ -4,7 +4,7 @@
 #include <vector>
 #include <mutex>
 #include <stdlib.h>
-#include <unistd.h>
+#include <windows.h>
 #include <ctime>
 
 using namespace std;
@@ -19,31 +19,28 @@ static vector<input_t> objvec;
 static vector<input_t> res;
 
 static mutex m1, m2, m3, resm;
-static int n;
+static int n = 10;
 
+FILE *f;
 
-unsigned long long tick(void)
-{
-    unsigned long long d;
-    __asm__ __volatile__ ("rdtsc" : "=A" (d) );
+static clock_t main_time = clock();
 
-    return d;
-}
-static unsigned long long main_time = tick();
-
+static clock_t mtime = clock();
 
 class Logger {
 public:
     Logger() {}
-    static void print(int step, string str, int i, unsigned long long time = 0){
-        std::cout << step <<" step: " << " time: "<< time << "  [" << i << "]" << str  << std::endl;
+    static void print(int step, string str, int i, clock_t time = 0){
+        fprintf(f,"[%d] step item%d time: %ld (%ld)  value: %s\n", step, i, time, time - mtime, str.c_str());
+        std::cout << step <<" step: " << " time: "<< time - main_time<<" "<< time-mtime<< "  [" << i << "]" << str  << std::endl;
+        mtime += time - mtime;
     }
 };
 Logger log;
 
 string myHash1(string s){
     string s1(s), s2(s);
-    for (int i = 0; i < s.length(); i++)
+    for (size_t i = 0; i < s.length(); i++)
     {
         s1[i] = (s[i] + i) %80 + 33;
         //log.print(10, s1, i);
@@ -89,8 +86,8 @@ void SingleHash() {
         input_t newObj = myHash1(myObj);
         m2.lock();
         queue2.push(newObj);
-        sleep(2);
-        unsigned long long time = tick();
+        Sleep(1000);
+        clock_t time = clock();
         log.print(1, newObj, num, time);
         m2.unlock();
         m1.unlock();
@@ -113,8 +110,8 @@ void MultiHash() {
         input_t newObj = myHash2(myObj);
         m3.lock();
         queue3.push(newObj);
-        sleep(3);
-        unsigned long long time = tick();
+        Sleep(3000);
+        clock_t time = clock();
         log.print(2, newObj, num, time);
         m3.unlock();
         m2.unlock();
@@ -137,8 +134,8 @@ void Result() {
         input_t newObj = myHash3(myObj);
         resm.lock();
         res.push_back(newObj);
-        sleep(2);
-        unsigned long long time = tick();
+        Sleep(1500);
+        clock_t time = clock();
         log.print(3, newObj, num, time);
         resm.unlock();
         m3.unlock();
@@ -151,17 +148,18 @@ int main()
 {
     cout << "Hello World!" << endl;
 
+    f = fopen("res.txt", "w");
+    n = 5;
+    objvec.resize(n);
 
     thread t1(SingleHash);
     thread t2(MultiHash);
     thread t3(Result);
 
-    n = 10;
-    objvec.resize(n);
+
     //res.resize(n);
     //string k = string("dsasd") + string(123);
-    char k = 'a' + 1;
-    main_time = tick();
+    main_time = clock();
     for (int i = 0; i < n; i++) {
         if (i % 2 == 0) {
             objvec[i] = string("string") + to_string(i);
@@ -171,15 +169,16 @@ int main()
 
     for (int i = 0; i < n; i++) {
         m1.lock();
-        unsigned long long time = tick();
+        clock_t time = clock();
         log.print(0, objvec[i], i, time);
         queue1.push(objvec[i]);
         m1.unlock();
-        sleep(2);
+        Sleep(2000);
     }
 
     t1.join();
     t2.join();
     t3.join();
+    fclose(f);
     return 0;
 }
