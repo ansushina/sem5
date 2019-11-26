@@ -29,9 +29,11 @@ void MainWindow::on_clear_button_clicked()
 {
    ui->draw_label->clear();
    myScene.clear();
-   ui->draw_label->setPixmap(myScene.getPixmap());
+   myScene.init();
    xyz.tostart();
    xyz.render(myScene);
+   ui->draw_label->setPixmap(myScene.getPixmap());
+
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)

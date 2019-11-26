@@ -10,6 +10,8 @@ typedef struct myscene myscene_t;
 #define XCENTER 450
 #define YCENTER 450
 
+const QColor background(190,190,255);
+
 
 class Scene {
 private:
@@ -20,26 +22,35 @@ private:
 public:
     double alphax=0, alphay=0, alphaz=0;
     double k = 1;
-    double dx, dy,xz;
+    double dx, dy,dz;
 
     Scene() {
         scene = new QPixmap(900, 900);
-        scene->fill(QColor(Qt::blue));
+        scene->fill(background);
 
         painter = new QPainter(scene);
-        painter->setPen(QPen(Qt::blue));
+        painter->setPen(background);
         clear_flag = true;
     }
     ~Scene() {
         delete painter;
         delete scene;
     }
+    void init() {
+        alphax = 0;
+        alphay = 0;
+        alphaz = 0;
+        k = 1;
+        dx = 0;
+        dy = 0;
+        dz = 0;
+    }
 
     void clear() {
         delete painter;
         delete scene;
         scene = new QPixmap(900,900);
-        scene->fill(QColor(Qt::blue));
+        scene->fill(background);
         painter = new QPainter(scene);
         clear_flag = true;
     }

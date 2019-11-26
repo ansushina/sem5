@@ -38,7 +38,7 @@ public:
     void render(Scene &scene) {
         scene.setColor(Qt::red);
         scene.drawLine(center, ox);
-        scene.setColor(Qt::green);
+        scene.setColor(QColor(0,155,0));
         scene.drawLine(center, oy);
         scene.setColor(Qt::black);
         scene.drawLine(center, oz);
