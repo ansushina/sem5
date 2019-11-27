@@ -178,7 +178,6 @@ void time() {
     FILE *f = fopen("time.txt", "w");
     fprintf(f,"%5s,%15s,%15s,%15s\n", "N" , "unrec", "rec", "1");
     printf("%5s,%15s,%15s,%15s\n", "N" , "unrec", "rec", "1");
-    //unsigned int time = 0;
     std::clock_t time = 0;
     int count = 5;
     for (int i = 100; i <= 3000; i+= 100) {
@@ -188,10 +187,6 @@ void time() {
         for (int j = 0; j < (i-1)*i; j++) {
             graph.AddEdge(std::rand()%i, std::rand()%i);
         }
-        //DFS(graph, 0, [](int vertex){ std::cout << vertex << " ";  });
-        //  std::cout << std::endl;
-        //graph.DFS(0, [](int vertex){ std::cout << vertex << " ";  });
-          //std::cout << std::endl;
         time = 0;
         for (int j = 0; j < count; j++) {
              std::clock_t start = std::clock();
