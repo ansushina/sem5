@@ -19,14 +19,12 @@ static vector<input_t> objvec;
 static vector<input_t> res;
 
 static mutex m1, m2, m3, resm;
-<<<<<<< HEAD
-static int n;
-=======
+
 static int n = 10;
 
 FILE *f;
 
->>>>>>> fd400799f505c147ae8ae3aa8344f38fff1cee40
+
 static clock_t main_time = clock();
 
 static clock_t mtime = clock();
@@ -35,13 +33,9 @@ class Logger {
 public:
     Logger() {}
     static void print(int step, string str, int i, clock_t time = 0){
-<<<<<<< HEAD
-        std::cout << step <<" step: " << " time: "<< time << "  [" << i << "]" << str  << std::endl;
-=======
         fprintf(f,"[%d] step item%d time: %ld (%ld)  value: %s\n", step, i, time, time - mtime, str.c_str());
         std::cout << step <<" step: " << " time: "<< time - main_time<<" "<< time-mtime<< "  [" << i << "]" << str  << std::endl;
         mtime += time - mtime;
->>>>>>> fd400799f505c147ae8ae3aa8344f38fff1cee40
     }
 };
 Logger log;
@@ -90,15 +84,10 @@ void SingleHash() {
         }
         input_t myObj = queue1.front();
         queue1.pop();
-        //log.print(1, myObj, num);
         input_t newObj = myHash1(myObj);
         m2.lock();
         queue2.push(newObj);
-<<<<<<< HEAD
-        sleep(2);
-=======
         Sleep(1000);
->>>>>>> fd400799f505c147ae8ae3aa8344f38fff1cee40
         clock_t time = clock();
         log.print(1, newObj, num, time);
         m2.unlock();
@@ -122,11 +111,7 @@ void MultiHash() {
         input_t newObj = myHash2(myObj);
         m3.lock();
         queue3.push(newObj);
-<<<<<<< HEAD
-        sleep(3);
-=======
         Sleep(3000);
->>>>>>> fd400799f505c147ae8ae3aa8344f38fff1cee40
         clock_t time = clock();
         log.print(2, newObj, num, time);
         m3.unlock();
@@ -150,11 +135,7 @@ void Result() {
         input_t newObj = myHash3(myObj);
         resm.lock();
         res.push_back(newObj);
-<<<<<<< HEAD
-        sleep(2);
-=======
         Sleep(1500);
->>>>>>> fd400799f505c147ae8ae3aa8344f38fff1cee40
         clock_t time = clock();
         log.print(3, newObj, num, time);
         resm.unlock();
@@ -175,14 +156,6 @@ int main()
     thread t1(SingleHash);
     thread t2(MultiHash);
     thread t3(Result);
-
-
-    //res.resize(n);
-    //string k = string("dsasd") + string(123);
-<<<<<<< HEAD
-    char k = 'a' + 1;
-=======
->>>>>>> fd400799f505c147ae8ae3aa8344f38fff1cee40
     main_time = clock();
     for (int i = 0; i < n; i++) {
         if (i % 2 == 0) {
