@@ -4,7 +4,7 @@
 #include <vector>
 #include <mutex>
 #include <stdlib.h>
-#include <windows.h>
+#include <unistd.h>
 #include <ctime>
 
 using namespace std;
@@ -34,7 +34,7 @@ public:
     Logger() {}
     static void print(int step, string str, int i, clock_t time = 0){
         fprintf(f,"[%d] step item%d time: %ld (%ld)  value: %s\n", step, i, time, time - mtime, str.c_str());
-        std::cout << step <<" step: " << " time: "<< time - main_time<<" "<< time-mtime<< "  [" << i << "]" << str  << std::endl;
+        std::cout << step <<" step: "<< "  item" << i << " " << " time: "<< time - main_time<<"  " << str  << std::endl;
         mtime += time - mtime;
     }
 };
@@ -84,14 +84,14 @@ void SingleHash() {
         }
         input_t myObj = queue1.front();
         queue1.pop();
+        m1.unlock();
         input_t newObj = myHash1(myObj);
         m2.lock();
         queue2.push(newObj);
-        Sleep(1000);
+        sleep(1);
         clock_t time = clock();
         log.print(1, newObj, num, time);
         m2.unlock();
-        m1.unlock();
         num++;
     }
 }
@@ -108,14 +108,15 @@ void MultiHash() {
         }
         input_t myObj = queue2.front();
         queue2.pop();
+        m2.unlock();
         input_t newObj = myHash2(myObj);
         m3.lock();
         queue3.push(newObj);
-        Sleep(3000);
+        sleep(3);
         clock_t time = clock();
         log.print(2, newObj, num, time);
         m3.unlock();
-        m2.unlock();
+
         num++;
     }
 }
@@ -132,14 +133,15 @@ void Result() {
         }
         input_t myObj = queue3.front();
         queue3.pop();
+        m3.unlock();
         input_t newObj = myHash3(myObj);
         resm.lock();
         res.push_back(newObj);
-        Sleep(1500);
+        sleep(1.5);
         clock_t time = clock();
         log.print(3, newObj, num, time);
         resm.unlock();
-        m3.unlock();
+
         num++;
     }
 }
@@ -165,12 +167,13 @@ int main()
     }
 
     for (int i = 0; i < n; i++) {
-        m1.lock();
         clock_t time = clock();
         log.print(0, objvec[i], i, time);
+        m1.lock();
+
         queue1.push(objvec[i]);
         m1.unlock();
-        Sleep(2000);
+        sleep(2);
     }
 
     t1.join();
