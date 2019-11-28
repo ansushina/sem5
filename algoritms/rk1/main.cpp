@@ -90,8 +90,12 @@ public:
         {
             viseted[i] = false;
         }
+        for (int i = 0; i < this->VerticesCount(); i++){
+            if (!viseted[i]) {
+                this->_dfs(i, func);
+            }
+        }
 
-        this->_dfs(vertex, func);
 
     }
 
@@ -101,24 +105,28 @@ public:
         {
             viseted[i] = false;
         }
-        std::stack<int> next_vertices;
+        for (int i = 0; i < this->VerticesCount(); i++){
+            if (!viseted[i]) {
+                std::stack<int> next_vertices;
 
-        next_vertices.push(vertex);
-        viseted[vertex] = true;
+                next_vertices.push(i);
+                viseted[i] = true;
 
-        while (next_vertices.size())
-        {
-            int current = next_vertices.top();
-            next_vertices.pop();
-
-            func(current);
-
-            for (int next_vertex: this->GetNextVertices(current))
-            {
-                if (!viseted[next_vertex])
+                while (next_vertices.size())
                 {
-                    viseted[next_vertex] = true;
-                    next_vertices.push(next_vertex);
+                    int current = next_vertices.top();
+                    next_vertices.pop();
+
+                    func(current);
+
+                    for (int next_vertex: this->GetNextVertices(current))
+                    {
+                        if (!viseted[next_vertex])
+                        {
+                            viseted[next_vertex] = true;
+                            next_vertices.push(next_vertex);
+                        }
+                    }
                 }
             }
         }
@@ -184,14 +192,14 @@ void time() {
         fprintf(f, "%5d,", i);
         printf("%5d,", i);
         CMatrixGraph graph(i);
-        for (int j = 0; j < (i-1)*i; j++) {
+        for (int j = 0; j < 5*i; j++) {
             graph.AddEdge(std::rand()%i, std::rand()%i);
         }
         time = 0;
         for (int j = 0; j < count; j++) {
              std::clock_t start = std::clock();
-             DFS(graph, 0, [](int vertex){ int i = vertex + 5; });
-             //graph.DFS2(0, [](int vertex){ int i = vertex + 5; });
+             //DFS(graph, 0, [](int vertex){ int i = vertex + 5; });
+             graph.DFS2(0, [](int vertex){ int i = vertex + 5; });
              std::clock_t end = std::clock();
              time += end-start;
         }

@@ -6,9 +6,8 @@
 
 int main(void) {
     setbuf(stdout, NULL);
-    char msg2[][16] = {"message1","message2"};
-    char msg[] = "message";
-    char buf[16];
+    char msg2[][8] = {"mes1","mes2"};
+    char buf[40] = "";
     int mypipe[2];
     int n = 2;
     pid_t childpid[n];
@@ -24,34 +23,36 @@ int main(void) {
             perror("Cant fork!\n");
             exit(1);
         } else if (childpid[i] == 0){
-            //printf("child[%d]: pid=%d; ppid=%d; gid=%d;\n", i, getpid(), getppid(), getgid());
             close(mypipe[0]);
-            write(mypipe[1], msg2[i], sizeof(msg));
+            write(mypipe[1], msg2[i], sizeof(msg2[i]));
             printf("child[%d]: pid=%d; ppid=%d; gid=%d;\n", i, getpid(), getppid(), getgid());
             return 0;
         } else {
             printf("parent: pid=%d, child[%d]=%d, idg=%d\n", getpid(), i, childpid[i], getgid());
-            wait(&status);
-            if (WIFEXITED(status)) {
-                printf("exit-normal, code = %d\n",WEXITSTATUS(status));
-            } else {
-                printf("exit unnormal");
-            }
-            close(mypipe[1]);
-            read(mypipe[0], buf, sizeof(buf));
-            printf("parent msg: %s\n", buf);
+    
 
         }
     }
 
 
-
-    wait(&status);
+    for (int i = 0; i < n; i++) {
+        wait(&status);
             if (WIFEXITED(status)) {
                 printf("exit-normal, code = %d\n",WEXITSTATUS(status));
+            } else if (WIFSIGNALED(status)) {
+                printf("exit-signal, code = %d\n",WTERMSIG(status));
+            } else if (WIFSTOPPED(status)) {
+                printf("stopped, code = %d\n",WSTOPSIG(status));
             } else {
                 printf("exit unnormal");
             }
-
+    }
+    close(mypipe[1]);
+    read(mypipe[0], buf, sizeof(buf));
+    printf("parent msg: ");
+    for (int i = 0 ; i < sizeof(buf); i++) {
+        printf("%c", buf[i]);
+    }
+    printf("\n");
     return 0;
 }

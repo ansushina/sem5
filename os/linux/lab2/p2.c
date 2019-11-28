@@ -19,21 +19,21 @@ int main(void) {
             return 0;
         } else {
             printf("parent: pid=%d, child[%d]=%d, idg=%d\n", getpid(), i, childpid[i], getgid());
-            /*wait(&status);
-            if (WIFEXITED(status)) {
-                printf("exit-normal, code = %d\n",WEXITSTATUS(status));
-            } else {
-                printf("exit unnormal");
-            }*/
         }
     }
 
-    wait(&status);
+
+    for (int i = 0; i < n; i++) {
+        wait(&status);
             if (WIFEXITED(status)) {
                 printf("exit-normal, code = %d\n",WEXITSTATUS(status));
+            } else if (WIFSIGNALED(status)) {
+                printf("exit-by-signal, code = %d\n",WTERMSIG(status));
+            } else if (WIFSTOPPED(status)) {
+                printf("stopped, code = %d\n",WSTOPSIG(status));
             } else {
                 printf("exit unnormal");
             }
-
+    }
     return 0;
 }

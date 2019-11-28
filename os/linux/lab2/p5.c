@@ -16,9 +16,8 @@ void catch_sis(int sis_num) {
 int main(void) {
     setbuf(stdout, NULL);
 
-    //signal(SIGTERM, catch_sis); //cntr+z
-    signal(SIGINT, catch_sis); //ignore
-    signal(SIGSEGV, SIG_DFL); //default
+    signal(SIGINT, catch_sis); 
+    printf("Press ctrl+c to change program way or wait 2 seconds\n");
 
     sleep(2);
 
@@ -44,33 +43,37 @@ int main(void) {
             if (flag) {
                 close(mypipe[0]);
                 write(mypipe[1], msg2[i], sizeof(msg));
-                //printf("child[%d]: pid=%d; ppid=%d; gid=%d;\n", i, getpid(), getppid(), getgid());
             }
             return 0;
         } else {
             printf("parent: pid=%d, child[%d]=%d, idg=%d\n", getpid(), i, childpid[i], getgid());
-            /*wait(&status);
-            if (WIFEXITED(status)) {
-                printf("exit-normal, code = %d\n",WEXITSTATUS(status));
-            } else {
-                printf("exit unnormal");
-            }*/
-            if (flag) {
-                close(mypipe[1]);
-                read(mypipe[0], buf, sizeof(buf));
-                printf("parent msg: %s\n", buf);
-            }
+            
         }
     }
 
 
-
-    wait(&status);
+    for (int i = 0; i < n; i++) {
+        wait(&status);
             if (WIFEXITED(status)) {
                 printf("exit-normal, code = %d\n",WEXITSTATUS(status));
+            } else if (WIFSIGNALED(status)) {
+                printf("exit-signal, code = %d\n",WTERMSIG(status));
+            } else if (WIFSTOPPED(status)) {
+                printf("stopped, code = %d\n",WSTOPSIG(status));
             } else {
                 printf("exit unnormal");
             }
+    }
+
+    if (flag) {
+        close(mypipe[1]);
+        read(mypipe[0], buf, sizeof(buf));
+        printf("parent msg: ");
+        for (int i = 0 ; i < sizeof(buf); i++) {
+            printf("%c", buf[i]);
+        }
+        printf("\n");
+    }
 
     return 0;
 }
