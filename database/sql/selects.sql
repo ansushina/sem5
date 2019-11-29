@@ -270,7 +270,6 @@ from rec
 group by artistid, age
 order by age;
 
-
 --24 Оконные функции. Использование конструкций MIN/MAX/AVG OVER()
 SELECT *,
 AVG(age) OVER(partition by sex) AS AvgAge, MIN(age) OVER(partition by sex) AS Min,

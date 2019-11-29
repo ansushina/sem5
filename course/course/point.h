@@ -4,7 +4,7 @@
 #include"matrix.h"
 #include<math.h>
 #include<iostream>
-#define PI 3.14
+#include"constants.h"
 
 struct point
 {

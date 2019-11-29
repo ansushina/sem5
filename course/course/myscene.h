@@ -4,11 +4,10 @@
 #include <QColor>
 
 #include "point.h"
+#include "constants.h"
 
 typedef struct myscene myscene_t;
 
-#define XCENTER 450
-#define YCENTER 450
 
 const QColor background(190,190,255);
 

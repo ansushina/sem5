@@ -42,7 +42,8 @@ HEADERS += \
     axis.h \
     voxelgrid.h \
     vector3.h \
-    render.h
+    render.h \
+    constants.h
 
 FORMS += \
         mainwindow.ui
