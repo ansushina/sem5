@@ -6,6 +6,7 @@
 #include "myscene.h"
 #include "axis.h"
 #include "render.h"
+#include "camera.h"
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +34,7 @@ private:
     Axis xyz;
     Render generateCloud;
     VoxelGrid *grid;
+
 };
 
 #endif // MAINWINDOW_H

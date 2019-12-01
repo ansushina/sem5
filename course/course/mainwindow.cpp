@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    grid = NULL;
     ui->setupUi(this);
     ui->draw_label->setPixmap(myScene.getPixmap());
 
@@ -92,13 +93,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 }
 
 void MainWindow::renderGrid() {
+    if (!grid) return;
     for (int kk = 0; kk < grid->getMaxZ(); kk++) {
         for (int jj = 0; jj < grid->getMaxY(); jj++) {
             for (int ii = 0; ii < grid->getMaxX(); ii++) {
                 if (grid->getVoxelDensity(ii,jj,kk)) {
                     const vec3 c = grid->getVoxelColor(ii,jj,kk);
-                    QColor *color = new QColor((int)c[0],(int) c[1], (int) c[2], grid->getVoxelDensity(ii,jj,kk)*255);
-                    myScene.drawPoint(point(ii, jj, kk), *color);
+                    QColor *color = new QColor((int)c[0],(int) c[1], (int) c[2], grid->getVoxelDensity(ii,jj,kk)*10);
+                    //myScene.drawPoint(point(ii, jj, kk), *color);
+                    myScene.drawCircle(point(ii*2, jj*2, kk*2), 1.5, *color);
                 }
             }
         }
@@ -109,6 +112,9 @@ void MainWindow::renderGrid() {
 
 void MainWindow::on_pushButton_2_clicked()
 {
+    ui->draw_label->clear();
+    myScene.clear();
+    xyz.render(myScene);
     generateCloud.generateVoxelGridRandom(18);
 
     printf("generate DONE\n");
