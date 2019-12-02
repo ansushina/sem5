@@ -34,6 +34,7 @@ void MainWindow::on_clear_button_clicked()
    xyz.tostart();
    xyz.render(myScene);
    ui->draw_label->setPixmap(myScene.getPixmap());
+   densityDelta = ui->densitySlider->value();
 
 }
 
@@ -42,6 +43,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     if (event->key() != Qt::Key_S && event->key() != Qt::Key_W &&
         event->key() != Qt::Key_A && event->key() != Qt::Key_D &&
         event->key() != Qt::Key_E && event->key() != Qt::Key_Z &&
+        event->key() != Qt::Key_U && event->key() != Qt::Key_J &&
+        event->key() != Qt::Key_H && event->key() != Qt::Key_K &&
         event->key() != Qt::Key_Plus && event->key() != Qt::Key_Minus    )
         return;
 
@@ -83,6 +86,24 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     {
        myScene.k *= (double)5/6;
     }
+    else if (event->key() == Qt::Key_H)
+    {
+       myScene.dx -= 10;
+    }
+    else if (event->key() == Qt::Key_K)
+    {
+       myScene.dx += 10;
+    }
+    else if (event->key() == Qt::Key_U)
+    {
+       myScene.dy += 10;
+    }
+    else if (event->key() == Qt::Key_J)
+    {
+       myScene.dy -= 10;
+    }
+
+
     ui->draw_label->clear();
     myScene.clear();
 
@@ -97,7 +118,8 @@ void MainWindow::renderGrid() {
     for (int kk = 0; kk < grid->getMaxZ(); kk++) {
         for (int jj = 0; jj < grid->getMaxY(); jj++) {
             for (int ii = 0; ii < grid->getMaxX(); ii++) {
-                if (grid->getVoxelDensity(ii,jj,kk)) {
+                if (grid->getVoxelDensity(ii,jj,kk) > 0.9 + densityDelta) {
+                    //printf("density [%d %d %d]: %lf\n", kk, jj, ii, grid->getVoxelDensity(ii,jj,kk) );
                     const vec3 c = grid->getVoxelColor(ii,jj,kk);
                     QColor *color = new QColor((int)c[0],(int) c[1], (int) c[2], grid->getVoxelDensity(ii,jj,kk)*10);
                     //myScene.drawPoint(point(ii, jj, kk), *color);
@@ -119,6 +141,21 @@ void MainWindow::on_pushButton_2_clicked()
 
     printf("generate DONE\n");
     grid = generateCloud.getGrid();
+    renderGrid();
+    ui->draw_label->setPixmap(myScene.getPixmap());
+}
+
+
+
+void MainWindow::on_densitySlider_valueChanged(int value)
+{
+    densityDelta = -(double)value/200;
+    printf("density: %lf (%lf)", 0.9 + densityDelta, densityDelta);
+
+    ui->draw_label->clear();
+    myScene.clear();
+
+    xyz.render(myScene);
     renderGrid();
     ui->draw_label->setPixmap(myScene.getPixmap());
 }

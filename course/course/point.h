@@ -103,23 +103,13 @@ struct point
         //this->setZ(res[0][2]);
     }
 
-    void move(double x, double y, double z) {
-        if (x == 0 && y == 0 && z == 0){
+    void move(double dx, double dy, double dz) {
+        if (dx == 0 && dy == 0 && dz == 0){
            return;
         }
-        Matrix m1(4,4), m2(1,4);
-
-        m1.setMatrix({1, 0, 0, 0,
-                      0, 1, 0, 0,
-                      0, 0, 1, 0,
-                      x, y, z, 1});
-
-        m2.setMatrix({this->x(), this->y(), this->z(), 1});
-
-        Matrix res = m2*m1;
-        this->setX(res[0][0]);
-        this->setY(res[0][1]);
-        this->setZ(res[0][2]);
+        this->setX(this->X+dz);
+        this->setY(this->Y+dy);
+        this->setZ(this->Z+dz);
     }
 
     void scaleUniform(point c, double k) {

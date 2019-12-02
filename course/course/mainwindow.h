@@ -26,6 +26,9 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+
+    void on_densitySlider_valueChanged(int value);
+
 private:
     void renderGrid();
 
@@ -34,7 +37,7 @@ private:
     Axis xyz;
     Render generateCloud;
     VoxelGrid *grid;
-
+    double densityDelta;
 };
 
 #endif // MAINWINDOW_H

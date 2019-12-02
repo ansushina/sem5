@@ -23,7 +23,7 @@ private:
 public:
     double alphax=0, alphay=0, alphaz=0;
     double k = 1;
-    double dx, dy,dz;
+    double dx = 0, dy = 0, dz = 0;
 
     Scene(): cam({0,0,900}){
         scene = new QPixmap(900, 900);
@@ -89,11 +89,12 @@ public:
         if (alphax) p.rorateX(alphax);
         if (alphay) p.rorateY(alphay);
         if (alphaz) p.rorateZ(alphaz);
+        if (dx != 0 || dy != 0 || dz != 0) p.move(dx,dy,dz);
         if (k != 1) {
             p.scaleUniform({0,0,0}, k);
             r *= k;
         }
-        p = cam.ProjectVertex(p);
+        //p = cam.ProjectVertex(p);
         QPointF qp;
         qp.setX(XCENTER+p.x());
         qp.setY(YCENTER-p.y());
@@ -132,8 +133,8 @@ public:
 
         double z1 = 0;//sqrt(2)/2 * p1.z();
         double z2 = 0;//sqrt(2)/2 * p2.z();
-        p1 = cam.ProjectVertex(p1);
-        p2 = cam.ProjectVertex(p2);
+        //p1 = cam.ProjectVertex(p1);
+        //p2 = cam.ProjectVertex(p2);
         painter->drawLine(XCENTER + p1.x() - z1, YCENTER - p1.y() + z1,
                              XCENTER+p2.x() - z2, YCENTER - p2.y() + z2);
     }
