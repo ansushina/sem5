@@ -5,7 +5,7 @@
 #include <QKeyEvent>
 #include "myscene.h"
 #include "axis.h"
-#include "render.h"
+#include "cloud.h"
 #include "camera.h"
 
 namespace Ui {
@@ -31,13 +31,16 @@ private slots:
 
 private:
     void renderGrid();
+    void renderFromCache();
 
     Ui::MainWindow *ui;
     Scene myScene;
     Axis xyz;
-    Render generateCloud;
+    Cloud generateCloud;
     VoxelGrid *grid;
     double densityDelta;
+    std::vector<point> pointsCache;
+    std::vector<QColor> colorCache;
 };
 
 #endif // MAINWINDOW_H

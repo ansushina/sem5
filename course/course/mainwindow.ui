@@ -43,10 +43,10 @@
    <widget class="QPushButton" name="clear_button">
     <property name="geometry">
      <rect>
-      <x>920</x>
+      <x>930</x>
       <y>780</y>
-      <width>281</width>
-      <height>51</height>
+      <width>251</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -141,6 +141,16 @@
     </property>
     <property name="tickInterval">
      <number>1</number>
+    </property>
+   </widget>
+   <widget class="QListView" name="listView">
+    <property name="geometry">
+     <rect>
+      <x>930</x>
+      <y>160</y>
+      <width>256</width>
+      <height>281</height>
+     </rect>
     </property>
    </widget>
   </widget>

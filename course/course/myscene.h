@@ -25,7 +25,7 @@ public:
     double k = 1;
     double dx = 0, dy = 0, dz = 0;
 
-    Scene(): cam({0,0,900}){
+    Scene() {
         scene = new QPixmap(900, 900);
         scene->fill(background);
 
@@ -94,13 +94,18 @@ public:
             p.scaleUniform({0,0,0}, k);
             r *= k;
         }
-        //p = cam.ProjectVertex(p);
-        QPointF qp;
-        qp.setX(XCENTER+p.x());
-        qp.setY(YCENTER-p.y());
-        QBrush br(color,Qt::SolidPattern);
-        painter->setBrush(br);
-        painter->drawEllipse(qp,r,r);
+        //if (k > 4) p.print();
+        if (cam.inCameraView(p) ) {
+            p = cam.ProjectVertex(p,r);
+            QPointF qp;
+            qp.setX(p.x());
+            qp.setY(p.y());
+            //qp.setX(XCENTER+p.x());
+            //qp.setY(YCENTER-p.y());
+            QBrush br(color,Qt::SolidPattern);
+            painter->setBrush(br);
+            painter->drawEllipse(qp,r,r);
+        }
 
     }
 
@@ -112,7 +117,7 @@ public:
         if (alphay) p.rorateY(alphay);
         if (alphaz) p.rorateZ(alphaz);
         if (k != 1) p.scaleUniform({0,0,0}, k);
-        p = cam.ProjectVertex(p);
+        //p = cam.ProjectVertex(p);
         painter->drawPoint(XCENTER+p.x() - z1, YCENTER-p.y() + z1);
     }
 
@@ -135,6 +140,7 @@ public:
         double z2 = 0;//sqrt(2)/2 * p2.z();
         //p1 = cam.ProjectVertex(p1);
         //p2 = cam.ProjectVertex(p2);
+        //painter->drawLine(p1.x(), p1.y(), p2.x(), p2.y());
         painter->drawLine(XCENTER + p1.x() - z1, YCENTER - p1.y() + z1,
                              XCENTER+p2.x() - z2, YCENTER - p2.y() + z2);
     }

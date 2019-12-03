@@ -36,6 +36,13 @@ void MainWindow::on_clear_button_clicked()
    ui->draw_label->setPixmap(myScene.getPixmap());
    densityDelta = ui->densitySlider->value();
 
+   myScene.drawLine(point(200,0,200), point(200,200,200));
+   myScene.drawLine(point(0,200,200), point(200,200,200));
+   myScene.drawLine(point(0,200,0), point(200,200,0));
+   myScene.drawLine(point(200,0,0), point(200,200,0));
+   myScene.drawLine(point(200,200,0), point(200,200,200));
+
+   ui->draw_label->setPixmap(myScene.getPixmap());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -45,6 +52,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         event->key() != Qt::Key_E && event->key() != Qt::Key_Z &&
         event->key() != Qt::Key_U && event->key() != Qt::Key_J &&
         event->key() != Qt::Key_H && event->key() != Qt::Key_K &&
+        event->key() != Qt::Key_N && event->key() != Qt::Key_I&&
         event->key() != Qt::Key_Plus && event->key() != Qt::Key_Minus    )
         return;
 
@@ -102,19 +110,39 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     {
        myScene.dy -= 10;
     }
+    else if (event->key() == Qt::Key_I)
+    {
+       myScene.dz += 10;
+    }
+    else if (event->key() == Qt::Key_N)
+    {
+       myScene.dz -= 10;
+    }
 
 
     ui->draw_label->clear();
     myScene.clear();
 
     xyz.render(myScene);
-    renderGrid();
+    renderFromCache();
     ui->draw_label->setPixmap(myScene.getPixmap());
 
 }
 
+void MainWindow::renderFromCache() {
+    if (pointsCache.empty()) {renderGrid(); return;}
+    printf("dx %lf dy %lf dz %lf;;; k %lf;;; ax %lf, ay %lf, az %lf;\n", myScene.dx, myScene.dy, myScene.dz, myScene.k, myScene.alphax, myScene.alphay,myScene.alphaz);
+    for (int i = 0; i < pointsCache.size(); i++)
+    {
+        myScene.drawCircle(pointsCache[i], 1.5, colorCache[i]);
+    }
+}
+
 void MainWindow::renderGrid() {
+    pointsCache.clear();
+    colorCache.clear();
     if (!grid) return;
+    point center = generateCloud.getCenter();
     printf("dx %lf dy %lf dz %lf;;; k %lf;;; ax %lf, ay %lf, az %lf;\n", myScene.dx, myScene.dy, myScene.dz, myScene.k, myScene.alphax, myScene.alphay,myScene.alphaz);
     for (int kk = 0; kk < grid->getMaxZ(); kk++) {
         for (int jj = 0; jj < grid->getMaxY(); jj++) {
@@ -124,7 +152,9 @@ void MainWindow::renderGrid() {
                     const vec3 c = grid->getVoxelColor(ii,jj,kk);
                     QColor *color = new QColor((int)c[0],(int) c[1], (int) c[2], grid->getVoxelDensity(ii,jj,kk)*10);
                     //myScene.drawPoint(point(ii, jj, kk), *color);
-                    myScene.drawCircle(point(ii*2, jj*2, kk*2), 1.5, *color);
+                    myScene.drawCircle(point(ii*2-center.x()*2, jj*2-center.x()*2, kk*2 - center.z()*2), 1.5, *color);
+                    pointsCache.push_back(point(ii*2-center.x()*2, jj*2-center.x()*2, kk*2 - center.z()*2));
+                    colorCache.push_back(*color);
                 }
             }
         }
