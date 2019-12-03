@@ -115,6 +115,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 void MainWindow::renderGrid() {
     if (!grid) return;
+    printf("dx %lf dy %lf dz %lf;;; k %lf;;; ax %lf, ay %lf, az %lf;\n", myScene.dx, myScene.dy, myScene.dz, myScene.k, myScene.alphax, myScene.alphay,myScene.alphaz);
     for (int kk = 0; kk < grid->getMaxZ(); kk++) {
         for (int jj = 0; jj < grid->getMaxY(); jj++) {
             for (int ii = 0; ii < grid->getMaxX(); ii++) {

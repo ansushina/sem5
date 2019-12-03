@@ -107,7 +107,7 @@ struct point
         if (dx == 0 && dy == 0 && dz == 0){
            return;
         }
-        this->setX(this->X+dz);
+        this->setX(this->X+dx);
         this->setY(this->Y+dy);
         this->setZ(this->Z+dz);
     }
