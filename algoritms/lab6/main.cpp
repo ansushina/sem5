@@ -197,7 +197,8 @@ int main()
 {
     //cout << "Hello World!" << endl;
 
-    setbuf(stdout, NULL);
+
+    /*setbuf(stdout, NULL);
     Matrix M(12,12);
     M.make_rand();
     M.print();
@@ -212,7 +213,7 @@ int main()
             for (int t = 50; t <= 400; t+=50)
             {
                 double dif = 0;
-                for (auto i = 0; i < 50; i++)
+                for (auto i = 0; i < 15; i++)
                 {
                     pair<int, vector<int>> results = Ant(M, t, alpha, ro);
                     dif += abs(results.first - ideal_len);
@@ -222,17 +223,17 @@ int main()
             }
 
         }
-    }
+    }*/
 
 
-    /*
+
     FILE *f = fopen("time.txt", "w");
     fprintf(f,"%5s,%10s,%10s,%10s\n", "N" , "1", "2", "-");
     printf("%5s,%10s,%10s,%10s\n", "N" , "1", "2", "-");
     std::clock_t time = 0;
-    int repeat = 5;
+    int repeat = 10;
     int start = 2;
-    int end = 20;
+    int end = 15;
     int step = 1;
     for (int i = start; i < end; i+=step) {
         fprintf(f, "%5d,", i);
@@ -257,7 +258,7 @@ int main()
         for (int j = 0; j < repeat ; j++)
         {
             std::clock_t start = std::clock();
-            pair<int, vector<int>> results = Ant(M, 290, 0.5, 0.5);
+            pair<int, vector<int>> results = Ant(M, 350, 0.75, 0.25);
             std::clock_t end = std::clock();
             time += end-start;
             //printf("Ant ");
@@ -266,7 +267,7 @@ int main()
         printf("%10d\n", time/repeat);
         fprintf(f,"%10d\n", time/repeat);
     }
-    */
+
 
     return 0;
 }
