@@ -11,6 +11,7 @@ public:
     Cloud();
     ~Cloud();
     void generateVoxelGridRandom(int seed);
+    void generateVoxelGridRandom(int seed, int x, int y, int z);
     VoxelGrid* getGrid();
 
     point getCenter() {

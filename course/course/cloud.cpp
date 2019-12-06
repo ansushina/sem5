@@ -13,7 +13,7 @@ Cloud::~Cloud(){
 
 void Cloud::generateVoxelGridRandom(int seed)
 {
-    VoxelGrid *grid = new VoxelGrid(0.1, 100, 100, 20, 0);
+    VoxelGrid *grid = new VoxelGrid(0.1, 50, 50, 50, 0);
     Noise *noise = new Noise(0.5, 5, seed); // Seed = 188
 
     // Get max length from grid center to grid surface
@@ -28,16 +28,16 @@ void Cloud::generateVoxelGridRandom(int seed)
                 double cloud = noise->PerlinNoise3(ii*grid->getVoxelSize(), jj*grid->getVoxelSize(), kk*grid->getVoxelSize());
 
 
-                //vec3 voxel(vec3(ii + 0.5, jj + 0.5, kk + 0.5));
-                //double distance = (voxel - center).length(); // Distance from current voxel to grid center
-               // double cover = distance*max_ratio + 0.3; // Amount of cloud (0.93)
-                //double sharpness = 0.5; // Cloud fuzziness and sharpness
-                //double density = 5; // Cloud density
+               /* vec3 voxel(vec3(ii + 0.5, jj + 0.5, kk + 0.5));
+                double distance = (voxel - center).length(); // Distance from current voxel to grid center
+                double cover = distance*max_ratio + 0.3; // Amount of cloud (0.93)
+                double sharpness = 0.5; // Cloud fuzziness and sharpness
+                double density = 5; // Cloud density
 
-                //cloud = cloud - cover;
-                //if (cloud < 0) cloud = 0;
-                //cloud = cloud*density;
-                //cloud = 1.0 - powf(sharpness, cloud);
+                cloud = cloud - cover;
+                if (cloud < 0) cloud = 0;
+                cloud = cloud*density;
+                cloud = 1.0 - powf(sharpness, cloud);*/
 
                 grid->setVoxelDensity(ii, jj, kk, cloud);
 
@@ -54,6 +54,24 @@ void Cloud::generateVoxelGridRandom(int seed)
     vGrid = grid; // Set voxel grid
     // Cloud progress 100%
     //for (int ii = 0; ii < 100; ii++ ) { CloudProgress(0, 100); }
+}
+
+void Cloud::generateVoxelGridRandom(int seed, int x, int y, int z)
+{
+    VoxelGrid *grid = new VoxelGrid(0.1, x, y, z, 0);
+    Noise *noise = new Noise(0.5, 5, seed);
+    for (int kk = 0; kk < grid->getMaxZ(); kk++) {
+        for (int jj = 0; jj < grid->getMaxY(); jj++) {
+            for (int ii = 0; ii < grid->getMaxX(); ii++) {
+                double cloud = noise->PerlinNoise3(ii*grid->getVoxelSize(), jj*grid->getVoxelSize(), kk*grid->getVoxelSize());
+                grid->setVoxelDensity(ii, jj, kk, cloud);
+                vec3 color(255, 255, 255);
+                grid->setVoxelColor(ii, jj, kk, color);
+            }
+        }
+    }
+
+    vGrid = grid;
 }
 
 VoxelGrid* Cloud::getGrid()

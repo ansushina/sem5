@@ -88,4 +88,6 @@ private:
     vec3 up, straight, right;
 };
 
+
+
 #endif // CAMERA_H

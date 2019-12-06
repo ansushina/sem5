@@ -5,14 +5,15 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    light(point(0,1450,0))
 {
     grid = NULL;
     ui->setupUi(this);
     ui->draw_label->setPixmap(myScene.getPixmap());
 
     myScene.setColor(Qt::black);
-    xyz.render(myScene);
+    //sxyz.render(myScene);
     ui->draw_label->setPixmap(myScene.getPixmap());
 
     vec3 d(1,1,1);
@@ -31,16 +32,16 @@ void MainWindow::on_clear_button_clicked()
    ui->draw_label->clear();
    myScene.clear();
    myScene.init();
-   xyz.tostart();
-   xyz.render(myScene);
+   //xyz.tostart();
+   //xyz.render(myScene);
    ui->draw_label->setPixmap(myScene.getPixmap());
    densityDelta = ui->densitySlider->value();
 
-   myScene.drawLine(point(200,0,200), point(200,200,200));
-   myScene.drawLine(point(0,200,200), point(200,200,200));
-   myScene.drawLine(point(0,200,0), point(200,200,0));
-   myScene.drawLine(point(200,0,0), point(200,200,0));
-   myScene.drawLine(point(200,200,0), point(200,200,200));
+  // myScene.drawLine(point(200,0,200), point(200,200,200));
+  // myScene.drawLine(point(0,200,200), point(200,200,200));
+   //myScene.drawLine(point(0,200,0), point(200,200,0));
+   //myScene.drawLine(point(200,0,0), point(200,200,0));
+   //myScene.drawLine(point(200,200,0), point(200,200,200));
 
    ui->draw_label->setPixmap(myScene.getPixmap());
 }
@@ -123,7 +124,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     ui->draw_label->clear();
     myScene.clear();
 
-    xyz.render(myScene);
+    //xyz.render(myScene);
     renderFromCache();
     ui->draw_label->setPixmap(myScene.getPixmap());
 
@@ -131,10 +132,19 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 void MainWindow::renderFromCache() {
     if (pointsCache.empty()) {renderGrid(); return;}
-    printf("dx %lf dy %lf dz %lf;;; k %lf;;; ax %lf, ay %lf, az %lf;\n", myScene.dx, myScene.dy, myScene.dz, myScene.k, myScene.alphax, myScene.alphay,myScene.alphaz);
+    ui->settings_list->clear();
+    ui->settings_list->append("k = " +  QString::number(myScene.k));
+    ui->settings_list->append("dx = " +  QString::number(myScene.dx));
+    ui->settings_list->append("dy = " +  QString::number(myScene.dy));
+    ui->settings_list->append("dz = " +  QString::number(myScene.dz));
+    ui->settings_list->append("alphax = " +  QString::number(myScene.alphax));
+    ui->settings_list->append("alphay = " +  QString::number(myScene.alphay));
+    ui->settings_list->append("alphaz = " +  QString::number(myScene.alphaz));
+    //printf("dx %lf dy %lf dz %lf;;; k %lf;;; ax %lf, ay %lf, az %lf;\n", myScene.dx, myScene.dy, myScene.dz, myScene.k, myScene.alphax, myScene.alphay,myScene.alphaz);
     for (int i = 0; i < pointsCache.size(); i++)
     {
         myScene.drawCircle(pointsCache[i], 1.5, colorCache[i]);
+        //printf("color %d", colorCache[i].red());
     }
 }
 
@@ -143,23 +153,44 @@ void MainWindow::renderGrid() {
     colorCache.clear();
     if (!grid) return;
     point center = generateCloud.getCenter();
-    printf("dx %lf dy %lf dz %lf;;; k %lf;;; ax %lf, ay %lf, az %lf;\n", myScene.dx, myScene.dy, myScene.dz, myScene.k, myScene.alphax, myScene.alphay,myScene.alphaz);
+
+    ui->settings_list->clear();
+    ui->settings_list->append("k = " +  QString::number(myScene.k));
+    ui->settings_list->append("dx = " +  QString::number(myScene.dx));
+    ui->settings_list->append("dy = " +  QString::number(myScene.dy));
+    ui->settings_list->append("dz = " +  QString::number(myScene.dz));
+    ui->settings_list->append("alphax = " +  QString::number(myScene.alphax));
+    ui->settings_list->append("alphay = " +  QString::number(myScene.alphay));
+    ui->settings_list->append("alphaz = " +  QString::number(myScene.alphaz));
+/*
+    //printf("dx %lf dy %lf dz %lf;;; k %lf;;; ax %lf, ay %lf, az %lf;\n", myScene.dx, myScene.dy, myScene.dz, myScene.k, myScene.alphax, myScene.alphay,myScene.alphaz);
     for (int kk = 0; kk < grid->getMaxZ(); kk++) {
         for (int jj = 0; jj < grid->getMaxY(); jj++) {
             for (int ii = 0; ii < grid->getMaxX(); ii++) {
                 if (grid->getVoxelDensity(ii,jj,kk) > 0.9 + densityDelta) {
                     //printf("density [%d %d %d]: %lf\n", kk, jj, ii, grid->getVoxelDensity(ii,jj,kk) );
                     const vec3 c = grid->getVoxelColor(ii,jj,kk);
-                    QColor *color = new QColor((int)c[0],(int) c[1], (int) c[2], grid->getVoxelDensity(ii,jj,kk)*10);
+                    QColor *color = new QColor((int)c[0],(int) c[1], (int) c[2], grid->getVoxelDensity(ii,jj,kk)*40);
                     //myScene.drawPoint(point(ii, jj, kk), *color);
-                    myScene.drawCircle(point(ii*2-center.x()*2, jj*2-center.x()*2, kk*2 - center.z()*2), 1.5, *color);
-                    pointsCache.push_back(point(ii*2-center.x()*2, jj*2-center.x()*2, kk*2 - center.z()*2));
+                    //myScene.drawCircle(point(ii*2-center.x()*2, jj*2-center.y()*2, kk*2 - center.z()*2), 1.5, *color);
+                    pointsCache.push_back(point(ii*2-center.x()*2, jj*2-center.y()*2, kk*2 - center.z()*2));
                     colorCache.push_back(*color);
                 }
             }
         }
     }
+    liting();*/
+    light.smth(grid,pointsCache,colorCache,densityDelta);
+    renderFromCache();
     printf("render done\n");
+    ui->main_list->clear();
+    ui->main_list->append("Размер окна: " + QString::number(CW)+"x" + QString::number(CH));
+
+    ui->main_list->append("Размер облака: " + QString::number(grid->getMaxX()) + "x" +
+                          QString::number(grid->getMaxY()) + "x" + QString::number(grid->getMaxZ()));
+    ui->main_list->append("Всего вокселей: "+QString::number(grid->getMaxX()*grid->getMaxY()* grid->getMaxZ()));
+    ui->main_list->append("Из них значимых: "+QString::number(pointsCache.size()));
+
 
 }
 
@@ -167,14 +198,35 @@ void MainWindow::on_pushButton_2_clicked()
 {
     ui->draw_label->clear();
     myScene.clear();
-    xyz.render(myScene);
+    //xyz.render(myScene);
     generateCloud.generateVoxelGridRandom(18);
 
     printf("generate DONE\n");
     grid = generateCloud.getGrid();
     renderGrid();
     ui->draw_label->setPixmap(myScene.getPixmap());
+
+    ui->main_list->clear();
+    ui->main_list->append("Размер окна: " + QString::number(CW)+"x" + QString::number(CH));
+
+    ui->main_list->append("Размер облака: " + QString::number(grid->getMaxX()) + "x" +
+                          QString::number(grid->getMaxY()) + "x" + QString::number(grid->getMaxZ()));
+    ui->main_list->append("Всего вокселей: "+QString::number(grid->getMaxX()*grid->getMaxY()* grid->getMaxZ()));
+    ui->main_list->append("Из них значимых: "+QString::number(pointsCache.size()));
+
 }
+
+
+void MainWindow::liting() {
+    light.init(pointsCache);
+    light.setCmax(QColor(230,230,230));
+    light.setCmin(QColor(255,255,255));
+    for (int i = 0; i < pointsCache.size(); i++)
+    {
+        colorCache[i] = light.getColor(pointsCache[i], colorCache[i]);
+    }
+}
+
 
 
 
@@ -186,7 +238,31 @@ void MainWindow::on_densitySlider_valueChanged(int value)
     ui->draw_label->clear();
     myScene.clear();
 
-    xyz.render(myScene);
+    //xyz.render(myScene);
     renderGrid();
     ui->draw_label->setPixmap(myScene.getPixmap());
+}
+
+void MainWindow::on_button_size_clicked()
+{
+    int yy = ui->y_spin->value();
+    int xx = ui->x_spin->value();
+    int zz = ui->z_spin->value();
+    ui->draw_label->clear();
+    myScene.clear();
+    //xyz.render(myScene);
+    generateCloud.generateVoxelGridRandom(18,xx,yy,zz);
+
+    printf("generate DONE\n");
+    grid = generateCloud.getGrid();
+    renderGrid();
+    ui->draw_label->setPixmap(myScene.getPixmap());
+
+    ui->main_list->clear();
+    ui->main_list->append("Размер окна: " + QString::number(CW)+"x" + QString::number(CH));
+
+    ui->main_list->append("Размер облака: " + QString::number(grid->getMaxX()) + "x" +
+                          QString::number(grid->getMaxY()) + "x" + QString::number(grid->getMaxZ()));
+    ui->main_list->append("Всего вокселей: "+QString::number(grid->getMaxX()*grid->getMaxY()* grid->getMaxZ()));
+    ui->main_list->append("Из них значимых: "+QString::number(pointsCache.size()));
 }

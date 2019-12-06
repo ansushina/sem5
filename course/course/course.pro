@@ -30,7 +30,8 @@ SOURCES += \
     camera.cpp \
     matrix.cpp \
     voxelgrid.cpp \
-    cloud.cpp
+    cloud.cpp \
+    light.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     voxelgrid.h \
     vector3.h \
     constants.h \
-    cloud.h
+    cloud.h \
+    light.h
 
 FORMS += \
         mainwindow.ui

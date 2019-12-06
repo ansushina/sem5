@@ -7,6 +7,7 @@
 #include "axis.h"
 #include "cloud.h"
 #include "camera.h"
+#include "light.h"
 
 namespace Ui {
 class MainWindow;
@@ -29,7 +30,10 @@ private slots:
 
     void on_densitySlider_valueChanged(int value);
 
+    void on_button_size_clicked();
+
 private:
+    void liting();
     void renderGrid();
     void renderFromCache();
 
@@ -41,6 +45,7 @@ private:
     double densityDelta;
     std::vector<point> pointsCache;
     std::vector<QColor> colorCache;
+    Light light;
 };
 
 #endif // MAINWINDOW_H
