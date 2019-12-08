@@ -4,9 +4,6 @@
 #include<vector>
 #include<math.h>
 
-
-
-
 template <typename T, size_t size>
 class MyVector{
 public:

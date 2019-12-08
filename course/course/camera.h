@@ -39,7 +39,7 @@ public:
     }
 
     ScreenPoint ProjectVertex(point p, double &r) {
-        if (p.z()) r *= d/(p.z()+d);
+        if (p.z() && (p.z()+d)) r *= d/(p.z()+d);
         return  CamToScreenStandart(pointToCam(p));
     }
 

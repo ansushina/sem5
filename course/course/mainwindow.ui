@@ -67,63 +67,6 @@
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="tab">
-        <attribute name="title">
-         <string>Примеры</string>
-        </attribute>
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>30</y>
-           <width>221</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Сгенерировать рандомно</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="pushButton">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>70</y>
-           <width>221</width>
-           <height>25</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="pushButton_3">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>100</y>
-           <width>221</width>
-           <height>25</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="pushButton_4">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>130</y>
-           <width>221</width>
-           <height>25</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
          <string>Пользовательские</string>
@@ -307,6 +250,63 @@
          </property>
         </widget>
        </widget>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Примеры</string>
+        </attribute>
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>10</y>
+           <width>231</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Круглое облако</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="button_exsample_2">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>60</y>
+           <width>231</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Плотные облака </string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="button_exsample_3">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>110</y>
+           <width>231</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Разреженные облака</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="button_exsample_4">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>160</y>
+           <width>231</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Пролет через облако</string>
+         </property>
+        </widget>
+       </widget>
       </widget>
      </item>
      <item>
@@ -377,6 +377,19 @@
          <bool>true</bool>
         </property>
        </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="clear_button_2">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Сбросить преобразования</string>
+       </property>
       </widget>
      </item>
      <item>

@@ -27,7 +27,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     Noise.cpp \
-    matrix.cpp \
     voxelgrid.cpp \
     cloud.cpp
 
@@ -42,8 +41,7 @@ HEADERS += \
     voxelgrid.h \
     vector3.h \
     constants.h \
-    cloud.h \
-    light.h
+    cloud.h
 
 FORMS += \
         mainwindow.ui

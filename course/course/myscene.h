@@ -67,19 +67,16 @@ public:
         if (alphax) p.rorateX(alphax);
         if (alphay) p.rorateY(alphay);
         if (alphaz) p.rorateZ(alphaz);
-        if (dx != 0 || dy != 0 || dz != 0) p.move(dx,dy,dz);
         if (k != 1) {
             p.scaleUniform({0,0,0}, k);
             r *= k;
         }
-        //if (k > 4) p.print();
+        if (dx != 0 || dy != 0 || dz != 0) p.move(dx,dy,dz);
         if (cam.inCameraView(p) ) {
             p = cam.ProjectVertex(p,r);
             QPointF qp;
             qp.setX(p.x());
             qp.setY(p.y());
-            //qp.setX(XCENTER+p.x());
-            //qp.setY(YCENTER-p.y());
             QBrush br(color,Qt::SolidPattern);
             painter->setBrush(br);
             painter->drawEllipse(qp,r,r);
@@ -90,13 +87,15 @@ public:
     void drawPoint(point p, QColor color = Qt::black) {
         painter->setPen(color);
         clear_flag = false;
-        double z1 = 0;//sqrt(2)/2 * p.z();
+        double r = 0;
         if (alphax) p.rorateX(alphax);
         if (alphay) p.rorateY(alphay);
         if (alphaz) p.rorateZ(alphaz);
         if (k != 1) p.scaleUniform({0,0,0}, k);
-        //p = cam.ProjectVertex(p);
-        painter->drawPoint(XCENTER+p.x() - z1, YCENTER-p.y() + z1);
+        if (cam.inCameraView(p) ) {
+            p = cam.ProjectVertex(p,r);
+            painter->drawPoint(p.x(), p.y());
+        }
     }
 
     void drawLine(point p1, point p2) {
@@ -113,14 +112,10 @@ public:
             p1.rorateZ(alphaz);
             p2.rorateZ(alphaz);
         }
-
-        double z1 = 0;//sqrt(2)/2 * p1.z();
-        double z2 = 0;//sqrt(2)/2 * p2.z();
-        //p1 = cam.ProjectVertex(p1);
-        //p2 = cam.ProjectVertex(p2);
-        //painter->drawLine(p1.x(), p1.y(), p2.x(), p2.y());
-        painter->drawLine(XCENTER + p1.x() - z1, YCENTER - p1.y() + z1,
-                             XCENTER+p2.x() - z2, YCENTER - p2.y() + z2);
+        double r = 0;
+        p1 = cam.ProjectVertex(p1,r);
+        p2 = cam.ProjectVertex(p2,r);
+        painter->drawLine(p1.x(),p1.y(),p2.x(),p2.y());
     }
 
     void setColor(QColor color){
