@@ -7,7 +7,6 @@
 #include "axis.h"
 #include "cloud.h"
 #include "camera.h"
-#include "light.h"
 
 namespace Ui {
 class MainWindow;
@@ -32,6 +31,20 @@ private slots:
 
     void on_button_size_clicked();
 
+    void on_clear_button_2_clicked();
+
+    void on_button_exsample_2_clicked();
+
+    void on_button_exsample_3_clicked();
+
+    void on_button_exsample_4_clicked();
+
+    void on_action_triggered();
+
+    void on_action_2_triggered();
+
+    void on_action_4_triggered();
+
 private:
     void liting();
     void renderGrid();
@@ -43,9 +56,7 @@ private:
     Cloud generateCloud;
     VoxelGrid *grid;
     double densityDelta;
-    std::vector<point> pointsCache;
-    std::vector<QColor> colorCache;
-    Light light;
+    double density;
 };
 
 #endif // MAINWINDOW_H

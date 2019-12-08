@@ -43,7 +43,6 @@ public:
     double getVoxelDensity(int x, int y, int z);
     double getVoxelTransmissivity(int x, int y, int z);
 
-
     int getVoxelIndex(int x, int y, int z);
     std::vector<Voxel> getVoxelGrid();
     double getVoxelSize();

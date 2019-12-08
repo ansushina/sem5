@@ -93,7 +93,21 @@ public:
 private:
     std::vector<std::vector<double>> matrix;
 
-    Matrix MatrixMul(Matrix A, Matrix B);
+    Matrix MatrixMul(Matrix m1, Matrix m2) {
+        int N = m1.cols();
+        int M = m1.rows();
+        int Q = m2.cols();
+        Matrix c(M, Q);
+
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < Q; j++) {
+                for (int k = 0; k < N; k++) {
+                    c[i][j] += m1[i][k]*m2[k][j];
+                }
+            }
+        }
+        return c;
+    }
     Matrix Mul2(Matrix A, Matrix B);
 };
 

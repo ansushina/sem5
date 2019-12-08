@@ -3,6 +3,7 @@
 #include "voxelgrid.h"
 #include "camera.h"
 #include "Noise.h"
+#include "myscene.h"
 
 
 class Cloud
@@ -12,21 +13,30 @@ public:
     ~Cloud();
     void generateVoxelGridRandom(int seed);
     void generateVoxelGridRandom(int seed, int x, int y, int z);
+    void putPointsToCache(double densityDelta);
+    void renderFromCache(Scene &scene);
+
     VoxelGrid* getGrid();
 
     point getCenter() {
         return point(vGrid->getMaxX()/2, vGrid->getMaxY()/2, vGrid->getMaxZ()/2);
     }
 
-    void scalePoint(point p, double k) {
-        p.scaleUniform(this->getCenter(), k);
+    size_t cacheCount() {
+        return pointsCache.size();
     }
+    void clear();
 
-    point rotateCloudPoint(double alphax=0, double alphay=0, double alphaz=0);
+    void saveToFile(std::string filename);
+
+    void readFromFile(std::string filename);
 
 private:
     VoxelGrid *vGrid;
     camera *m_camera;
+
+    std::vector<point> pointsCache;
+    std::vector<QColor> colorCache;
 };
 
 #endif // CLOUD_H
