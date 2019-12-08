@@ -41,6 +41,10 @@ private slots:
 
     void on_action_triggered();
 
+    void on_action_2_triggered();
+
+    void on_action_4_triggered();
+
 private:
     void liting();
     void renderGrid();

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <QFileDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -244,5 +245,47 @@ void MainWindow::on_button_exsample_4_clicked()
 void MainWindow::on_action_triggered()
 {
     QFileDialog dialog;
-   dialog.getOpenFileName();
+    QString fname = dialog.getOpenFileName();
+    if (fname == NULL) {
+        return;
+    }
+    std::string filename = fname.toStdString();
+    generateCloud.readFromFile(filename);
+    ui->draw_label->clear();
+    myScene.clear();
+    printf("generate DONE\n");
+    grid = generateCloud.getGrid();
+    ui->main_list->clear();
+    ui->main_list->append("Размер окна: " + QString::number(CW)+"x" + QString::number(CH));
+    ui->main_list->append("Размер облака: " + QString::number(grid->getMaxX()) + "x" +
+                          QString::number(grid->getMaxY()) + "x" + QString::number(grid->getMaxZ()));
+    ui->main_list->append("Всего вокселей: "+QString::number(grid->getMaxX()*grid->getMaxY()* grid->getMaxZ()));
+    ui->main_list->append("Из них значимых: "+QString::number(generateCloud.cacheCount()));
+
+    renderFromCache();
+
+}
+
+void MainWindow::on_action_2_triggered()
+{
+    QFileDialog dialog;
+    QString fname = dialog.getSaveFileName();
+    if (fname == NULL) {
+        return;
+    }
+    std::string filename = fname.toStdString();
+    generateCloud.saveToFile(filename);
+}
+
+void MainWindow::on_action_4_triggered()
+{
+    QMessageBox msg;
+    msg.setText("w,s - поворот вокрут оси Х\n"
+                "a,d - поворот вокруг оси Y\n"
+                "z,e - поворот вокруг оси Z\n"
+                "u,j - перемещение вверх/вниз\n"
+                "h,k - перемещение влево/вправо\n"
+                "n,i - перемещение вперед/назад\n"
+                "+,- - изменение масштаба");
+    msg.exec();
 }

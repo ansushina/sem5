@@ -1,6 +1,7 @@
 #include "cloud.h"
 #include "Noise.h"
 #include <math.h>
+#include <stdlib.h>
 
 Cloud::Cloud()
 {
@@ -111,6 +112,40 @@ void Cloud::renderFromCache(Scene &scene) {
     {
         scene.drawCircle(pointsCache[i], 1.5, colorCache[i]);
     }
+}
+
+void Cloud::saveToFile(std::string filename){
+    FILE *f = fopen(filename.c_str(), "w");
+    fprintf(f, "%d\n", pointsCache.size());
+    for (int i = 0; i < pointsCache.size(); i++)
+    {
+        point p = pointsCache[i];
+        QColor q = colorCache[i];
+        fprintf(f, "%d %d %d %d %d %d %d\n", (int)p.x(), (int)p.y(), (int)p.z(), q.red(), q.green(), q.blue(), q.alpha());
+    }
+    fclose(f);
+}
+
+void Cloud::readFromFile(std::string filename){
+    VoxelGrid *grid = new VoxelGrid(0.1, 5, 5, 5, 0);
+    vGrid = grid;
+    pointsCache.clear();
+    colorCache.clear();
+    FILE *f = fopen(filename.c_str(), "r");
+    int size;
+    fscanf(f, "%d\n", &size);
+    for (int i = 0; i < size; i++)
+    {
+        int x,y,z;
+        int r,g,b,a;
+        fscanf(f, "%d%d%d%d%d%d%d", &x, &y, &z, &r, &g, &b, &a);
+        point p(x,y,z);
+        QColor q;
+        q.setRed(r);q.setGreen(g);q.setBlue(b);q.setAlpha(a);
+        pointsCache.push_back(p);
+        colorCache.push_back(q);
+    }
+    fclose(f);
 }
 
 void Cloud::clear() {

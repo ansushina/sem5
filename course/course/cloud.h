@@ -27,6 +27,10 @@ public:
     }
     void clear();
 
+    void saveToFile(std::string filename);
+
+    void readFromFile(std::string filename);
+
 private:
     VoxelGrid *vGrid;
     camera *m_camera;
