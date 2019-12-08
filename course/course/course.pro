@@ -27,11 +27,9 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     Noise.cpp \
-    camera.cpp \
     matrix.cpp \
     voxelgrid.cpp \
-    cloud.cpp \
-    light.cpp
+    cloud.cpp
 
 HEADERS += \
         mainwindow.h \

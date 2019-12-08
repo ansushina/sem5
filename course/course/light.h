@@ -37,20 +37,6 @@ public:
         }
     }
 
-    void init(std::vector<point> pointsCache) {
-        Rmax = 0; Rmin = -1;
-        for (size_t i = 0; i < pointsCache.size(); i++)
-        {
-            double d = distance(pointsCache[i], lightCenter);
-            if (d > Rmax)
-            {
-                Rmax = d;
-            } else if (Rmin== -1 || d < Rmin) {
-                Rmin = d;
-            }
-        }
-    }
-
     void setCmin(QColor Cm) {
         Cmin = Cm;
     }
@@ -58,25 +44,7 @@ public:
     void setCmax(QColor Cm) {
         Cmax = Cm;
     }
-
-    QColor getColor(point p, QColor old) {
-        double R = distance(p,lightCenter);
-        QColor res;
-        //printf(" color %d\n", (int)((R-Rmin)/(Rmax-Rmin)*(Cmax.red() - Cmin.red()) + Cmin.red()));
-        res.setRed((int)((R-Rmin)/(Rmax-Rmin)*(Cmax.red() - Cmin.red()) + Cmin.red()));
-        res.setGreen((int)((R-Rmin)/(Rmax-Rmin)*(Cmax.green() - Cmin.green()) + Cmin.green()));
-        res.setBlue((int)((R-Rmin)/(Rmax-Rmin)*(Cmax.blue() - Cmin.blue()) + Cmin.blue()));
-        res.setAlpha(old.alpha());
-        return res;
-    }
-
 private:
-    double distance(point p1, point p2) {
-        return sqrt((p1.x()-p2.x()) * (p1.x()-p2.x()) +
-                    (p1.y()-p2.y()) * (p1.y()-p2.y()) +
-                    (p1.z()-p2.z()) * (p1.z()-p2.z()));
-    }
-
     point lightCenter;
     double Rmax, Rmin;
     QColor Cmin, Cmax;

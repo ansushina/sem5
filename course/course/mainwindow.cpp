@@ -32,16 +32,19 @@ void MainWindow::on_clear_button_clicked()
    ui->draw_label->clear();
    myScene.clear();
    myScene.init();
-   //xyz.tostart();
-   //xyz.render(myScene);
    ui->draw_label->setPixmap(myScene.getPixmap());
    densityDelta = ui->densitySlider->value();
+   pointsCache.clear();
+   colorCache.clear();
 
-  // myScene.drawLine(point(200,0,200), point(200,200,200));
-  // myScene.drawLine(point(0,200,200), point(200,200,200));
-   //myScene.drawLine(point(0,200,0), point(200,200,0));
-   //myScene.drawLine(point(200,0,0), point(200,200,0));
-   //myScene.drawLine(point(200,200,0), point(200,200,200));
+   ui->settings_list->clear();
+   ui->settings_list->append("k = " +  QString::number(myScene.k));
+   ui->settings_list->append("dx = " +  QString::number(myScene.dx));
+   ui->settings_list->append("dy = " +  QString::number(myScene.dy));
+   ui->settings_list->append("dz = " +  QString::number(myScene.dz));
+   ui->settings_list->append("alphax = " +  QString::number(myScene.alphax));
+   ui->settings_list->append("alphay = " +  QString::number(myScene.alphay));
+   ui->settings_list->append("alphaz = " +  QString::number(myScene.alphaz));
 
    ui->draw_label->setPixmap(myScene.getPixmap());
 }
@@ -215,18 +218,6 @@ void MainWindow::on_pushButton_2_clicked()
     ui->main_list->append("Из них значимых: "+QString::number(pointsCache.size()));
 
 }
-
-
-void MainWindow::liting() {
-    light.init(pointsCache);
-    light.setCmax(QColor(230,230,230));
-    light.setCmin(QColor(255,255,255));
-    for (int i = 0; i < pointsCache.size(); i++)
-    {
-        colorCache[i] = light.getColor(pointsCache[i], colorCache[i]);
-    }
-}
-
 
 
 

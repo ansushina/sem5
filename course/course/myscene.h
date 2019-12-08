@@ -60,28 +60,6 @@ public:
         return *(this->scene);
     }
 
-    void drawTexture(point p, double r, QColor color = Qt::black) {
-        painter->setPen(color);
-        clear_flag = false;
-
-        if (alphax) p.rorateX(alphax);
-        if (alphay) p.rorateY(alphay);
-        if (alphaz) p.rorateZ(alphaz);
-        if (k != 1) {
-            p.scaleUniform({0,0,0}, k);
-            r *= k;
-        }
-        QPointF qp;
-        qp.setX(XCENTER+p.x());
-        qp.setY(YCENTER-p.y());
-        QImage pixmap;
-        if ( pixmap.load("i.png") )	{
-            QBrush br(color,Qt::SolidPattern);
-            painter->setBrush(br);
-            painter->drawImage(qp,pixmap);
-        }
-    }
-
     void drawCircle(point p, double r, QColor color = Qt::black) {
         painter->setPen(color);
         clear_flag = false;
