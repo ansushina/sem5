@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    grid = NULL;
+    //grid = NULL;
     ui->setupUi(this);
     ui->draw_label->setPixmap(myScene.getPixmap());
 
@@ -150,9 +150,9 @@ void MainWindow::on_pushButton_2_clicked()
     ui->main_list->clear();
     ui->main_list->append("Размер окна: " + QString::number(CW)+"x" + QString::number(CH));
 
-    ui->main_list->append("Размер облака: " + QString::number(grid->getMaxX()) + "x" +
-                          QString::number(grid->getMaxY()) + "x" + QString::number(grid->getMaxZ()));
-    ui->main_list->append("Всего вокселей: "+QString::number(grid->getMaxX()*grid->getMaxY()* grid->getMaxZ()));
+    ui->main_list->append("Размер облака: " + QString::number(grid.getMaxX()) + "x" +
+                          QString::number(grid.getMaxY()) + "x" + QString::number(grid.getMaxZ()));
+    ui->main_list->append("Всего вокселей: "+QString::number(grid.getMaxX()*grid.getMaxY()* grid.getMaxZ()));
     ui->main_list->append("Из них значимых: "+QString::number(generateCloud.cacheCount()));
 
 }
@@ -173,9 +173,9 @@ void MainWindow::on_densitySlider_valueChanged(int value)
     ui->draw_label->setPixmap(myScene.getPixmap());
     ui->main_list->clear();
     ui->main_list->append("Размер окна: " + QString::number(CW)+"x" + QString::number(CH));
-    ui->main_list->append("Размер облака: " + QString::number(grid->getMaxX()) + "x" +
-                          QString::number(grid->getMaxY()) + "x" + QString::number(grid->getMaxZ()));
-    ui->main_list->append("Всего вокселей: "+QString::number(grid->getMaxX()*grid->getMaxY()* grid->getMaxZ()));
+    ui->main_list->append("Размер облака: " + QString::number(grid.getMaxX()) + "x" +
+                          QString::number(grid.getMaxY()) + "x" + QString::number(grid.getMaxZ()));
+    ui->main_list->append("Всего вокселей: "+QString::number(grid.getMaxX()*grid.getMaxY()* grid.getMaxZ()));
     ui->main_list->append("Из них значимых: "+QString::number(generateCloud.cacheCount()));
 }
 
@@ -195,9 +195,9 @@ void MainWindow::on_button_size_clicked()
     grid = generateCloud.getGrid();
     ui->main_list->clear();
     ui->main_list->append("Размер окна: " + QString::number(CW)+"x" + QString::number(CH));
-    ui->main_list->append("Размер облака: " + QString::number(grid->getMaxX()) + "x" +
-                          QString::number(grid->getMaxY()) + "x" + QString::number(grid->getMaxZ()));
-    ui->main_list->append("Всего вокселей: "+QString::number(grid->getMaxX()*grid->getMaxY()* grid->getMaxZ()));
+    ui->main_list->append("Размер облака: " + QString::number(grid.getMaxX()) + "x" +
+                          QString::number(grid.getMaxY()) + "x" + QString::number(grid.getMaxZ()));
+    ui->main_list->append("Всего вокселей: "+QString::number(grid.getMaxX()*grid.getMaxY()* grid.getMaxZ()));
     ui->main_list->append("Из них значимых: "+QString::number(generateCloud.cacheCount()));
 
     renderFromCache();
@@ -257,9 +257,9 @@ void MainWindow::on_action_triggered()
     grid = generateCloud.getGrid();
     ui->main_list->clear();
     ui->main_list->append("Размер окна: " + QString::number(CW)+"x" + QString::number(CH));
-    ui->main_list->append("Размер облака: " + QString::number(grid->getMaxX()) + "x" +
-                          QString::number(grid->getMaxY()) + "x" + QString::number(grid->getMaxZ()));
-    ui->main_list->append("Всего вокселей: "+QString::number(grid->getMaxX()*grid->getMaxY()* grid->getMaxZ()));
+    ui->main_list->append("Размер облака: " + QString::number(grid.getMaxX()) + "x" +
+                          QString::number(grid.getMaxY()) + "x" + QString::number(grid.getMaxZ()));
+    ui->main_list->append("Всего вокселей: "+QString::number(grid.getMaxX()*grid.getMaxY()* grid.getMaxZ()));
     ui->main_list->append("Из них значимых: "+QString::number(generateCloud.cacheCount()));
 
     renderFromCache();
@@ -277,15 +277,64 @@ void MainWindow::on_action_2_triggered()
     generateCloud.saveToFile(filename);
 }
 
+void MainWindow::test(){
+    setbuf(stdout, NULL);
+    density = 0.9;
+    densityDelta = 0;
+    FILE *f = fopen("time.txt", "w");
+    fprintf(f,"%5s,%10s,%10s,%10s\n", "N" , "1", "2", "-");
+    printf("%5s,%10s,%10s,%10s\n", "N" , "1", "2", "-");
+    std::clock_t time = 0;
+    int repeat = 10;
+    int start = 120;
+    int end = 150;
+    int step = 10;
+    for (int i = start; i < end; i+=step) {
+        fprintf(f, "%5d,", i*i*i);
+        printf("%5d,", i*i*i);
+
+        time = 0;
+        for (int j = 0; j < repeat ; j++)
+        {
+            std::clock_t start = std::clock();
+            generateCloud.generateVoxelGridRandom(18,i,i,i);
+            std::clock_t end = std::clock();
+            time += end-start;
+        }
+        printf("%10d,", time/repeat);
+        fprintf(f,"%10d,", time/repeat);
+        generateCloud.putPointsToCache(density+densityDelta);
+        grid = generateCloud.getGrid();
+        printf("%10d,",  generateCloud.cacheCount());
+        fprintf(f,"%10d,",  generateCloud.cacheCount());
+        time = 0;
+        for (int j = 0; j < repeat ; j++)
+        {
+            std::clock_t start = std::clock();
+            renderFromCache();
+            std::clock_t end = std::clock();
+            time += end-start;
+        }
+        printf("%10d,\n", time/repeat);
+        fprintf(f,"%10d,\n", time/repeat);
+    }
+    fclose(f);
+}
+
 void MainWindow::on_action_4_triggered()
 {
     QMessageBox msg;
-    msg.setText("w,s - поворот вокрут оси Х\n"
-                "a,d - поворот вокруг оси Y\n"
-                "z,e - поворот вокруг оси Z\n"
-                "u,j - перемещение вверх/вниз\n"
-                "h,k - перемещение влево/вправо\n"
-                "n,i - перемещение вперед/назад\n"
-                "+,- - изменение масштаба");
+    msg.setText("Клавиши W/S предназначены для вращения облака  вокруг оси OX."
+                "Клавиши A/D предназначены для вращения облака  вокруг оси OY."
+                "Клавиши Z/E предназначены для вращения облака  вокруг оси OZ."
+                "Клавиши H/K предназначены для перемещения облака по оси OX."
+                "Клавиши J/U предназначены  для перемещения облака по оси OY."
+                "Клавиши N/I предназначены  для перемещения облака по оси OZ."
+                "Клавиши +/- предназначены для масштабирования облака относительно начала координат.");
     msg.exec();
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    test();
 }

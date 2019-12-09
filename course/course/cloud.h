@@ -16,10 +16,10 @@ public:
     void putPointsToCache(double densityDelta);
     void renderFromCache(Scene &scene);
 
-    VoxelGrid* getGrid();
+    VoxelGrid& getGrid();
 
     point getCenter() {
-        return point(vGrid->getMaxX()/2, vGrid->getMaxY()/2, vGrid->getMaxZ()/2);
+        return point(vGrid.getMaxX()/2, vGrid.getMaxY()/2, vGrid.getMaxZ()/2);
     }
 
     size_t cacheCount() {
@@ -32,7 +32,7 @@ public:
     void readFromFile(std::string filename);
 
 private:
-    VoxelGrid *vGrid;
+    VoxelGrid vGrid;
     camera *m_camera;
 
     std::vector<point> pointsCache;
