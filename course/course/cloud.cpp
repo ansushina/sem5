@@ -25,18 +25,12 @@ void Cloud::generateVoxelGridRandom(int seed)
             for (int ii = 0; ii < grid.getMaxX(); ii++) {
                 double cloud = noise->PerlinNoise3(ii*grid.getVoxelSize(), jj*grid.getVoxelSize(), kk*grid.getVoxelSize());
 
-
                 vec3 voxel(vec3(ii + 0.5, jj + 0.5, kk + 0.5));
                 double distance = (voxel - center).length(); // Distance from current voxel to grid center
-                double cover = distance*max_ratio + 0.3; // Amount of cloud (0.93)
-                double sharpness = 0.5; // Cloud fuzziness and sharpness
-                double density = 5; // Cloud density
+                double cover = distance*max_ratio + 0.2; // Amount of cloud (0.93)
 
                 cloud = cloud - cover;
                 if (cloud < 0) cloud = 0;
-                cloud = cloud*density;
-                cloud = 1.0 - powf(sharpness, cloud);
-
                 grid.setVoxelDensity(ii, jj, kk, cloud);
 
                 vec3 color(255, 255, 255);
