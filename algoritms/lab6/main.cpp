@@ -10,7 +10,6 @@ using namespace std;
 #define A_B_CONST 1
 
 //рекурсивный алгоритм полного обхода
-
 static int ss(0);
 void absolute(Matrix &D, vector<int> &min_path, int &min_d, vector<int> &cur_path, vector<bool> &visited, int &cur_len);
 
@@ -87,7 +86,6 @@ void find_not_visited(vector<int> &not_viseted, vector<int> cur_path, size_t M) 
 }
 
 // Муравьиный алгоритм
-
 pair<int, vector<int>> Ant(Matrix D, const int Tmax, const double alpha, const double ro){
     const int teta_start = 10;
     const int teta_min = 5;
@@ -225,8 +223,7 @@ int main()
         }
     }*/
 
-
-
+    /*
     FILE *f = fopen("time.txt", "w");
     fprintf(f,"%5s,%10s,%10s,%10s\n", "N" , "1", "2", "-");
     printf("%5s,%10s,%10s,%10s\n", "N" , "1", "2", "-");
@@ -266,7 +263,27 @@ int main()
         }
         printf("%10d\n", time/repeat);
         fprintf(f,"%10d\n", time/repeat);
-    }
+    }*/
+
+    double m[] = {0,1,1,1, 1,
+                 1,0,1,1, 1,
+                 1,1,0,2, 1,
+                 1,1,2,0, 1,
+                 1,1,1,1, 0};
+   /* double m [] = {0, 2, 1, 2,
+                  2, 0, 2, 3,
+                  1, 2, 0, 2,
+                  2, 3, 2, 0} */
+    Matrix mat(5,5);
+    mat.fill_array(m);
+    mat.print();
+
+    pair<int, vector<int>> results = absolute_find(mat);
+    printf("Absolute ");
+    print_res(results);
+    pair<int, vector<int>> res = Ant(mat, 350, 0.75, 0.25);
+    printf("Ant ");
+    print_res(res);
 
 
     return 0;
