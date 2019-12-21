@@ -1,0 +1,21 @@
+{
+    "type": "object",
+    "properties" : {
+        "ID":
+        {
+            "type": "number",
+            "minimum" : 0
+        },
+        "SongID": 
+        {
+            "type" : "number",
+            "minimum": 0
+        },
+        "ArtistID": 
+        {
+            "type" : "number",
+            "minimum": 0
+        }
+    },
+    "required" : ["ID", "SongID","ArtistID"]
+}
