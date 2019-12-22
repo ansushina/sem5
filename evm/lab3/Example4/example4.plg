@@ -1,0 +1,30 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+F:\evm\lab3\Example4\example4.uvproj
+Project File Date:  07/27/2014
+
+<h2>Output:</h2>
+Rebuild target 'Target 1'
+assembling LPC2300.s...
+compiling MAIN.C...
+MAIN.C(87): warning:  #177-D: variable "n" was declared but never referenced
+linking...
+Program Size: Code=1368 RO-data=0 RW-data=0 ZI-data=1384  
+".\example4.axf" - 0 Errors, 1 Warning(s).
+Rebuild target 'Target 1'
+assembling LPC2300.s...
+compiling MAIN.C...
+MAIN.C(87): warning:  #177-D: variable "n" was declared but never referenced
+linking...
+Program Size: Code=1192 RO-data=0 RW-data=0 ZI-data=1384  
+".\example4.axf" - 0 Errors, 1 Warning(s).
+Rebuild target 'Target 1'
+assembling LPC2300.s...
+compiling MAIN.C...
+MAIN.C(87): warning:  #177-D: variable "n" was declared but never referenced
+linking...
+Program Size: Code=1368 RO-data=0 RW-data=0 ZI-data=1384  
+".\example4.axf" - 0 Errors, 1 Warning(s).
