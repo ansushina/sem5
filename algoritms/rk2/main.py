@@ -1,6 +1,6 @@
 import re
 def regex(text):
-    pattern = r'\b\d+-(?:й|я|м|ю|е|х|а|и|го|му|мя|ми)\b'
+    pattern = r'(?:\t|\n| )\d+-(?:й|я|м|ю|е|х|а|и|го|му|мя|ми)\b'
     print(pattern)
     a = re.findall(pattern, text)
     #print("Result by regex:")
@@ -89,9 +89,9 @@ if f:
     print('reg\t    fsm')
     for i in range(lenm):
         if i < len(reg) and i < len(fs):
-            print(reg[i] + '\t    ' +fs[i])
+            print(reg[i][1:] + '\t    ' +fs[i])
         elif i < len(reg) and not i >= len(fs):
-            print(reg[i] + '\t    ' +'no  ')
+            print(reg[i][1:] + '\t    ' +'no  ')
         elif i >= len(reg) and not i < len(fs):
             print('no  ' + '\t    ' +fs[i])
             
